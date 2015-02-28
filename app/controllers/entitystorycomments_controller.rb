@@ -30,10 +30,10 @@ class EntitystorycommentsController < ApplicationController
 
     respond_to do |format|
       if @entitystorycomment.save
-        format.html { redirect_to @entitystorycomment.entitystory, notice: 'Entitystorycomment was successfully created.' }
+        format.html { redirect_to @entitystorycomment.entitystory, notice: 'Comment was successfully submitted.' }
         format.json { render action: 'show', status: :created, location: @entitystorycomment }
       else
-        format.html { render action: 'new' }
+        format.html { redirect_to @entitystorycomment.entitystory, alert: 'Error found when submitting comment:' + @entitystorycomment.errors.full_messages.join(", ")  }
         format.json { render json: @entitystorycomment.errors, status: :unprocessable_entity }
       end
     end
@@ -44,7 +44,7 @@ class EntitystorycommentsController < ApplicationController
   def update
     respond_to do |format|
       if @entitystorycomment.update(entitystorycomment_params)
-        format.html { redirect_to @entitystorycomment, notice: 'Entitystorycomment was successfully updated.' }
+        format.html { redirect_to @entitystorycomment, notice: 'Comment was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }

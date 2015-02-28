@@ -33,7 +33,7 @@ class Entity < ActiveRecord::Base
 	def best_property_value(pt_id)
 		values = properties.where(:propertytype_id => pt_id)
 		if values.empty?
-			"No value available"
+			"-"
 		else
 			values.max { |a, b| (a.votes.count + a.certainty ) <=> (b.votes.count + b.certainty ) }.value
 		end

@@ -1,47 +1,67 @@
-<p id="notice"><%= notice %></p>
+<% content_for(:title) do %>
+  User Profile - 
+<% end %>
 
 <h2>
-  User
+  <%= @user.email %>
 </h2>
 
 <!-- User Details -->
 
-<div>
-  <p>Email: <%= @user.email %></p>
-  <p>Registered on: <%= @user.created_at.to_formatted_s(:short) %></p>
+<div class="wrapper-user-details">
+  <div>
+    <p>Registered on: <%= @user.created_at.to_formatted_s(:short) %></p>
+  </div>
 </div>
 
 <!-- Actions -->
 
-<div>
-  <%= link_to "Import Family Tree", import_user_path(@user) %>
-</div>
-<div>
-  <%= link_to "Upload Picture", new_photo_path %>
-</div>
+<ul class="button-group">
+  <li>
+    <%= link_to "Import Family Tree", import_user_path(@user), class: "button" %>
+  </li>
+  <li>
+    <%= link_to "Upload Picture", new_photo_path, class: "button" %>
+  </li>
+</ul>
 
 <!-- Listing Photos -->
-
+<hr/>
 <h3>Photos</h3>
 <div>
   <% @user.photos.each do |photo| %>
-    <div>
-      <%= image_tag photo.picture.url(:small) %>
-      <%= link_to photo.address, photo %> |
-      <%= photo.date %> |
-      <%= photo.entities.count %> entities |
-      <%= photo.photostories.count %> stories
+    <div class="two-sides-container">
+      <div class="two-column">
+        <%= link_to photo do %>
+          <%= image_tag photo.picture.url(:small), class: "align-right" %>
+        <% end %>
+      </div>
+      <div class="two-column">
+        <ul class="vcard align-left maximize-dims">
+          <li>
+            <%= link_to photo.address, photo %>
+          </li>
+          <li>
+            <%= photo.date %>
+          </li>
+          <li>
+            <%= photo.entities.count %> entities
+          </li>
+          <li>
+            <%= photo.photostories.count %> stories
+          </li>
+        </ul>
+      </div>
     </div>
   <% end %>
 </div>
 
 <!-- Family Tree -->
-
+<hr/>
 <h3>Family Tree</h3>
 <% if @user.gentree.exists? %>
-  <%= image_tag @user.gentree %>
+  <%= image_tag @user.gentree, class: "align-center" %>
 <% else %>
   <p>You haven't uploaded a family tree yet.</p>
 <% end %>
-<div>
-</div>
+

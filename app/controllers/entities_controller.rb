@@ -35,7 +35,7 @@ class EntitiesController < ApplicationController
 
     respond_to do |format|
       if @entity.save
-        format.html { redirect_to @entity, notice: 'Entity was successfully created.' }
+        format.html { redirect_to @entity, notice: 'Entity was successfully identified.' }
         format.json { render action: 'show', status: :created, location: @entity }
       else
         format.html { render action: 'new' }

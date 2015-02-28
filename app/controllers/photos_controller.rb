@@ -233,7 +233,7 @@ class PhotosController < ApplicationController
           entity.y2 = nE['y2']
           entity.user_id = current_user.id
           entity.entitytype_id =
-            entity_types[ nE['tipo'] ].et.id;
+            entity_types[ nE['tipo'] ]['et'].id;
 
           entity.save # sets id, created_at and updated_at attributes
 
@@ -244,7 +244,7 @@ class PhotosController < ApplicationController
             property.value = nP.content.strip
             property.certainty = nP['certeza']
             property.propertytype_id =
-              entity_types[ nE['tipo'] ].pts[ nP['tipo'] ].id;
+              entity_types[ nE['tipo'] ]['pts'][ nP['tipo'] ].id;
 
             property.save
           end

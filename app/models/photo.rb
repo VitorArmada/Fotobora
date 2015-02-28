@@ -5,10 +5,13 @@ class Photo < ActiveRecord::Base
 
   has_attached_file :picture, :styles => {
     :normal => "800x600>",
-  	:small => "300x300>",
+  	:small => "300x200>",
   	:thumb => "100x100>"
   }
-  #validates_attachment_presence :picture
+
+  do_not_validate_attachment_file_type :picture
+  validates_attachment :picture, presence: true
+  
   #validates_attachment_content_type :picture, :content_type => [ 'image/jpeg', 'image/png' ]
 
   def pretty_date_taken

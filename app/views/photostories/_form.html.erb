@@ -1,8 +1,5 @@
 <% content_for(:head) do %>
   
-  <style type="text/css">
-  </style>
-
   <%= javascript_include_tag "jquery.imagemapster.min" %>
 
   <script type="text/javascript">
@@ -60,20 +57,21 @@
 <% end %>
 
 <!-- Picture -->
-
-<div>
-  <%= image_tag @photostory.photo.picture.url(:normal),
-    :id => "picture",
-    :usemap => "#map" %>
-  <map name="map" id="map">
-    <% @photostory.photo.entities.each do |e| %>
-      <area
-        shape="rect"
-        coords="<%= e.x1 %>,<%= e.y1 %>,<%= e.x2 %>,<%= e.y2 %>"
-        href="<%= url_for(e) %>"
-        title="<%= e.full_label %>"/>
-    <% end %>
-  </map>
+<div class="photo-wrapper">
+  <div class="photo">
+    <%= image_tag @photostory.photo.picture.url(:normal),
+      :id => "picture",
+      :usemap => "#map" %>
+    <map name="map" id="map">
+      <% @photostory.photo.entities.each do |e| %>
+        <area
+          shape="rect"
+          coords="<%= e.x1 %>,<%= e.y1 %>,<%= e.x2 %>,<%= e.y2 %>"
+          href="<%= url_for(e) %>"
+          title="<%= e.full_label %>"/>
+      <% end %>
+    </map>
+  </div>
 </div>
 
 <!-- Form -->
@@ -81,7 +79,7 @@
 <%= form_for(shallow_args(@photostory.photo,@photostory)) do |f| %>
   <% if @photostory.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@photostory.errors.count, "error") %> prohibited this photostory from being saved:</h2>
+      <h5><%= pluralize(@photostory.errors.count, "error") %> prohibited this photostory from being saved:</h5>
 
       <ul>
       <% @photostory.errors.full_messages.each do |msg| %>
@@ -99,7 +97,17 @@
     <%= f.label :text %><br>
     <%= f.text_area :text, cols: 60, rows: 10 %>
   </div>
-  <div class="actions">
-    <%= f.submit "Create Story" %>
-  </div>
+
+  <ul class="button-group">
+    <li>
+      <% if action_name == 'new' %>
+        <%= link_to 'Back', @photostory.photo, class: "button disabled" %>
+      <% else %>
+        <%= link_to 'Back', @photostory, class: "button disabled" %>
+      <% end %>
+    </li>
+    <li>
+      <%= f.submit "Create Story", class: "button success" %>
+    </li>
+  </ul>
 <% end %>

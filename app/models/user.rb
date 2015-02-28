@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   
   has_many :people
   has_attached_file :gentree
+  do_not_validate_attachment_file_type :gentree
 
   #has_attached_file :picture # use 32x32 thumb for photo pages
 end

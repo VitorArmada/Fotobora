@@ -42,17 +42,19 @@
 
 <!-- Image -->
 
-<div>
-  <%= image_tag @entitystory.entity.photo.picture.url(:normal),
-    :id => "picture",
-    :usemap => "#map" %>
-  <map name="map" id="map">
-    <area
-      shape="rect"
-      coords="<%= @entitystory.entity.x1 %>,<%= @entitystory.entity.y1 %>,<%= @entitystory.entity.x2 %>,<%= @entitystory.entity.y2 %>"
-      href=""
-      title="<%= @entitystory.entity.full_label %>">
-  </map>
+<div class="photo-wrapper">
+  <div class="photo">
+    <%= image_tag @entitystory.entity.photo.picture.url(:normal),
+      :id => "picture",
+      :usemap => "#map" %>
+    <map name="map" id="map">
+      <area
+        shape="rect"
+        coords="<%= @entitystory.entity.x1 %>,<%= @entitystory.entity.y1 %>,<%= @entitystory.entity.x2 %>,<%= @entitystory.entity.y2 %>"
+        href=""
+        title="<%= @entitystory.entity.full_label %>">
+    </map>
+  </div>
 </div>
 
 <!-- Form -->
@@ -60,7 +62,7 @@
 <%= form_for(shallow_args(@entitystory.entity,@entitystory)) do |f| %>
   <% if @entitystory.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@entitystory.errors.count, "error") %> prohibited this entitystory from being saved:</h2>
+      <h5><%= pluralize(@entitystory.errors.count, "error") %> prohibited this entitystory from being saved:</h5>
 
       <ul>
       <% @entitystory.errors.full_messages.each do |msg| %>
@@ -78,7 +80,17 @@
     <%= f.label :text %><br>
     <%= f.text_area :text, cols: 60, rows: 10 %>
   </div>
-  <div class="actions">
-    <%= f.submit "Create Story" %>
-  </div>
+
+  <ul class="button-group">
+    <li>
+      <% if action_name == 'new' %>
+        <%= link_to 'Back', @entitystory.entity, class: "button disabled" %>
+      <% else %>
+        <%= link_to 'Back', @entitystory, class: "button disabled" %>
+      <% end %>
+    </li>
+    <li>
+      <%= f.submit "Create Story", class: "button success" %>
+    </li>
+  </ul>
 <% end %>

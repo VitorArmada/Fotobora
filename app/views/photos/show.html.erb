@@ -1,96 +1,56 @@
 <% content_for(:head) do %>
   
-  <style type="text/css">
-  </style>
-
   <%= javascript_include_tag "jquery.imagemapster.min" %>
 
-  <script type="text/javascript">
-
-    $(document).ready(function() {
-
-      var inArea;
-      var img = $('#picture');
-
-      var all_opts = {
-          stroke: true,
-          strokeWidth: 1,
-          strokeColor: 'ffffff',
-          strokeOpacity: 0.4,
-          fillOpacity: 0
-      };
-      var single_opts = {
-          stroke: true,
-          strokeWidth: 2,
-          strokeColor: 'ffffff',
-          strokeOpacity: 0.6
-      };
-      var initial_opts = {
-          isSelectable: false,
-          clickNavigate: true,
-          onMouseover: function (data) {
-              inArea = true;
-          },
-          onMouseout: function (data) {
-              inArea = false;
-          }
-      };
-      var opts = $.extend({}, all_opts, initial_opts, single_opts);
-
-      // Bind to the image 'mouseover' and 'mouseout' events to activate or deactivate ALL the areas. Check whether an area has been activated with "inArea" - IE<9 fires "onmouseover" again for the image when entering an area, so all areas would stay highlighted when entering a specific area in those browsers otherwise. It makes no difference for other browsers.
-
-     img.mapster('unbind')
-            .mapster(opts)
-            .bind('mouseover', function () {
-                if (!inArea) {
-                    img.mapster('set_options', all_opts);
-                    $("area").mapster('set', true);
-                    img.mapster('set_options', single_opts);
-                }
-            }).bind('mouseout', function () {
-                if (!inArea) {
-                    $("area").mapster('set', false);
-                }
-            });
-
-    });
-
-  </script>
+  <%= javascript_include_tag "photo.show" %>
 
 <% end %>
 
 <% content_for(:title) do %>
-  View Photo
+  View Photo - 
 <% end %>
-
-<p id="notice"><%= notice %></p>
-
-<h2>
-  Photo
-</h2>
 
 <!-- Picture -->
 
-<div>
-  <%= image_tag @photo.picture.url(:normal),
+<div class="photo-wrapper">
+  <div class="photo">
+    <%= image_tag @photo.picture.url(:normal),
     :id => "picture",
     :usemap => "#map" %>
-  <map name="map" id="map">
-    <% @photo.entities.each do |e| %>
-      <area
-        shape="rect"
-        coords="<%= e.x1 %>,<%= e.y1 %>,<%= e.x2 %>,<%= e.y2 %>"
-        href="<%= url_for(e) %>"
-        title="<%= e.full_label %>"/>
-    <% end %>
-  </map>
+    <map name="map" id="map">
+      <% @photo.entities.each do |e| %>
+        <area
+          shape="rect"
+          coords="<%= e.x1 %>,<%= e.y1 %>,<%= e.x2 %>,<%= e.y2 %>"
+          href="<%= url_for(e) %>"
+          title="<%= e.full_label %>"/>
+      <% end %>
+    </map>
+  </div>
 </div>
 
 <!-- Navigation -->
 
-<%= link_to 'Edit', edit_photo_path(@photo) %>
-<%= link_to 'Save to PDF', "/photos/#{@photo.id}/print.pdf" %>
-<%= link_to 'Import Annotations (XML)', import_photo_url(@photo) %>
+<ul class="button-group">
+  <% if is_user_owner?(@photo) %>
+    <li>
+      <%= link_to 'Edit', edit_photo_path(@photo), class: "button" %>
+    </li>
+  <% end %>
+  <li>
+    <%= link_to "Identify Entity", new_photo_entity_path(@photo), class: "button" %>
+  </li>
+  <li>
+    <%= link_to "Create Story", new_photo_photostory_path(@photo), class: "button" %>
+  </li>
+  <li>
+    <%= link_to 'Save to PDF', "/photos/#{@photo.id}/print.pdf", class: "button" %>
+  </li>
+  <li>
+    <%= link_to 'Import Annotations', import_photo_url(@photo), class: "button" %>
+  </li>
+</ul>
+
 
 <!-- Basic Details -->
 
@@ -98,65 +58,63 @@
   <strong>by</strong> <%= link_to @photo.user.email, user_path(@photo.user) %>
 </p>
 
-<p>
-  <strong>Address:</strong>
-  <%= @photo.address %>
-</p>
-
-<p>
-  <strong>Photographed on:</strong>
-  <%= @photo.pretty_date_taken  %>
-</p>
-
-<p>
-  <strong>Uploaded on:</strong>
-  <%= @photo.pretty_date_uploaded  %>
-</p>
+<ul class="no-bullet remove-padding">
+  <li>
+    <strong>Address:</strong>
+    <%= @photo.address %>
+  </li>
+  <li>
+    <strong>Photographed on:</strong>
+    <%= @photo.pretty_date_taken  %>
+  </li>
+  <li>
+    <strong>Uploaded on:</strong>
+    <%= @photo.pretty_date_uploaded  %>
+  </li>
+</ul>
 
 <!-- Entities -->
-
+<hr></hr>
+<h4> Entities: </h4>
 <div>
-  <strong> Entities: </strong>
   <% if not( @photo.entities.empty? ) %>
-    <div>
+    <ul class="inline-list remove-padding">
       <% @photo.entities.each do |e| %>
-        <div>
-          <strong> <%= link_to e.full_label, entity_path(e) %> </strong>
-        </div>
+        <li>
+          <%= link_to e.full_label, entity_path(e) %>
+        </li>
       <% end %>
-    </div>
+    </ul>
   <% else %>
-    <div>
+    <p>
       No entities available. Be the first to add one!
-    </div>
+    </p>
   <% end %>
-  <div>
-  	<%= link_to "Identify Entity", new_photo_entity_path(@photo) %>
-  </div>
 </div>
 
 <!-- Stories -->
 
+<hr/>
+<h4> Stories </h4>
+
 <div>
-  <strong> Stories: </strong>
   <% if not( @photo.photostories.empty? ) %>
-    <div>
+    <ul class="no-bullet remove-padding">
       <% @photo.photostories.each do |ps| %>
-        <div>
-          <strong> <%= link_to ps.title, photostory_path(ps) %> </strong>
-          | by <%= ps.user.email %>
-          | <%= ps.pretty_date %>
-          | <%= ps.photostorycomments.count %> comments
-          | <i>"<%= ps.summary_text %>"</i>
-        </div>
+        <li>
+          <ul class="inline-list remove-padding">
+            <li> <%= link_to ps.title, photostory_path(ps) %> </li>
+            <li> by <%= ps.user.email %></li>
+            <li> <%= ps.pretty_date %></li>
+            <li> <%= ps.photostorycomments.count %> comments</li>
+            <li> <i>"<%= ps.summary_text %>"</i></li>
+          </ul>
+        </li>
       <% end %>
-    </div>
+    </ul>
   <% else %>
-    <div>
+    <p>
       No stories available. Be the first to add one!
-    </div>
+    </p>
   <% end %>
-  <div>
-  	<%= link_to "Create Story", new_photo_photostory_path(@photo) %>
-  </div>
 </div>

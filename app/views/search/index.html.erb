@@ -1,33 +1,63 @@
+<% content_for(:title) do %>
+  Search - 
+<% end %>
+
 <p>
-  You searched for: <%= @query %>
+  You searched for: <strong><%= @query %></strong>
 </p>
 
+<hr/>
 <h3>Users</h3>
 
 <% if @users.count != 0 %>
 
-  <% @users.each do |user| %>
-      <%= link_to user.email, user %>
-  <% end %>
+  <ul class="no-bullet">
+    <% @users.each do |user| %>
+      <li>
+        <%= link_to user.email, user %>
+      </li>
+    <% end %>
+  </ul>
 
 <% else %>
   <p>No users matched the query.</p>
 <% end %>
 
+<hr/>
 <h3>Photos</h3>
 
 <% if @photos.count != 0 %>
 
-  <% @photos.each do |photo| %>
-    <div>
-      <%= image_tag photo.picture.url(:thumb) %>
-      <%= link_to photo.address, photo %> |
-      by <%= link_to photo.user.email, photo.user %> |
-      <%= photo.date %> |
-      <%= photo.entities.count %> entities |
-      <%= photo.photostories.count %> stories
-    </div>
-  <% end %>
+  <div>
+    <% @photos.each do |photo| %>
+      <div class="two-sides-container">
+        <div class="two-column">
+          <%= link_to photo do %>
+            <%= image_tag photo.picture.url(:small), class: "align-right" %>
+          <% end %>
+        </div>
+        <div class="two-column">
+          <ul class="vcard align-left maximize-dims">
+            <li>
+              <%= link_to photo.address, photo %>
+            </li>
+            <li>
+              <%= link_to photo.user.email, photo.user %>
+            </li>
+            <li>
+              <%= photo.date %>
+            </li>
+            <li>
+              <%= photo.entities.count %> entities
+            </li>
+            <li>
+              <%= photo.photostories.count %> stories
+            </li>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+  </div>
 
 <% else %>
   <p>No photos matched the query.</p>

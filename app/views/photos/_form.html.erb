@@ -1,7 +1,7 @@
 <%= form_for @photo, :html => { :multipart => true } do |f| %>
   <% if @photo.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@photo.errors.count, "error") %> prohibited this photo from being saved:</h2>
+      <h5><%= pluralize(@photo.errors.count, "error") %> prohibited this photo from being saved:</h5>
 
       <ul>
       <% @photo.errors.full_messages.each do |msg| %>
@@ -12,12 +12,12 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :address %><br>
+    <%= f.label :address, class: "h5" %><br>
     <%= f.text_field :address %>
   </div>
   <div class="field">
     <%= f.label :date %><br>
-    <%= f.date_select :date %>
+    <%= f.date_select :date, :order => [:day, :month, :year] %>
   </div>
   <div class="field">
     <%= f.label :picture %><br>
@@ -29,7 +29,17 @@
       <%= image_tag @photo.picture.url(:small) %>
     </div>
   <% end %>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+
+  <ul class="button-group">
+    <li>
+      <% if action_name == 'new' %>
+        <%= link_to 'Back to Profile', current_user, class: "button disabled" %>
+      <% else %>
+        <%= link_to 'Back to Photo', @photo, class: "button disabled" %>
+      <% end %>
+    </li>
+    <li>
+      <%= f.submit class: "button success" %>
+    </li>
+  </ul>
 <% end %>

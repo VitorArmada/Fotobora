@@ -2,58 +2,98 @@
 <html>
 <head>
   <title>
-    <%= yield(:title) %> - Fotobora
+    <%= yield(:title) %>Fotobora
   </title>
+
+  <%= favicon_link_tag 'camera.ico' %>
 
   <%= csrf_meta_tags %>
   
   <%= stylesheet_link_tag    "application" %>
-  <%= javascript_include_tag "application" %>
+  <%= stylesheet_link_tag    "normalize" %>
+  <%= stylesheet_link_tag    "foundation" %>
+
+  <%= javascript_include_tag "application" %>  
+  <%= javascript_include_tag "jquery.min" %>
+  <%= javascript_include_tag "foundation.min" %>
 
   <%= yield(:head) %>
 
+  <!--<% handle_popups %>
+-->
 </head>
 <body>
 
   <!-- Login and registration prompt -->
-
-  <ul>
-    <% if user_signed_in? %>
-      <li>
-        <%= link_to( current_user.email, user_path(current_user) ) %>  
-      </li>
-      <li>
-        <%= link_to('Logout', destroy_user_session_path, :method => :delete) %>       
-      </li> 
-    <% else %>
-      <li>
-        <%= link_to('Login', new_user_session_path)  %>  
-      </li>
-    <% end %>
-
-    <% if user_signed_in? %>
-      <li>
-        <%= link_to('Edit registration', edit_user_registration_path) %>
-      </li>
-    <% else %>
-      <li>
-        <%= link_to('Register', new_user_registration_path)  %>
-      </li>
-    <% end %>
+<nav class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a href="/" class="logo">Fotobora</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
   </ul>
 
-  <!-- Searching form -->
+  <section class="top-bar-section">
+    <!-- Right Nav Section -->
+    <ul class="right">
+      <% if user_signed_in? %>
 
-  <%= form_tag(search_path, method: "get") do %>
-    <%= text_field_tag(:q) %>
-    <%= submit_tag("Search") %>
-  <% end %>
+        <li class="has-form">
+          <div class="row collapse">
+            <div class="large-8 small-9 columns">
+              <%= form_tag(search_path, method: "get") do %>
+                <%= text_field_tag :q %>
+              <% end %>
+            </div>
+          </div>
+        </li>
+        <li>
+          <%= link_to( current_user.email, user_path(current_user) ) %>  
+        </li>
+        <li>
+          <%= link_to('Edit registration', edit_user_registration_path) %>
+        </li>
+        <li>
+          <%= link_to('Logout', destroy_user_session_path, :method => :delete) %>       
+        </li> 
 
-  <!-- Mensagens de estado ("Flash Messages") do devise, podemos usar para outras cenas-->
-  <p class="notice"><%= notice %></p>
-  <p class="alert"><%= alert %></p>
+      <% else %>
+      
+        <li>
+          <%= link_to('Login', new_user_session_path) %>  
+        </li>
 
+        <li>
+          <%= link_to('Register', new_user_registration_path)  %>
+        </li>
+      
+      <% end %>
+    </ul>
+  </section>
+
+
+</nav>
+
+
+<!-- Mensagens de estado ("Flash Messages") do devise, podemos usar para outras cenas-->
+
+<% if flash[:notice] %>
+  <div data-alert class="alert-box success radius">
+    <%= notice %>
+    <a href="#" class="close">&times;</a>
+  </div>
+<% elsif flash[:alert]  %>
+  <div data-alert class="alert-box alert radius">
+    <%= alert %>
+    <a href="#" class="close">&times;</a>
+  </div>
+<% end %>
+<% flash[:notice] = nil %>
+<% flash[:alert] = nil %>
+
+<div class="wrapper-general">
   <%= yield %>
+</div>
 
 </body>
 </html>

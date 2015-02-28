@@ -28,4 +28,6 @@ Fotobora::Application.configure do
   config.assets.debug = true
 
   Paperclip.options[:command_path] = "/usr/bin/convert"
+  Encoding.default_external = Encoding::UTF_8
+  Encoding.default_internal = Encoding::UTF_8
 end

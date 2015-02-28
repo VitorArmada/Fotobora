@@ -31,7 +31,7 @@ class EntitystoriesController < ApplicationController
 
     respond_to do |format|
       if @entitystory.save
-        format.html { redirect_to @entitystory, notice: 'Entitystory was successfully created.' }
+        format.html { redirect_to @entitystory, notice: 'Story was successfully created.' }
         format.json { render action: 'show', status: :created, location: @entitystory }
       else
         format.html { render action: 'new' }
@@ -45,7 +45,7 @@ class EntitystoriesController < ApplicationController
   def update
     respond_to do |format|
       if @entitystory.update(entitystory_params)
-        format.html { redirect_to @entitystory, notice: 'Entitystory was successfully updated.' }
+        format.html { redirect_to @entitystory, notice: 'Story was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }

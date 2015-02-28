@@ -9,14 +9,6 @@
   <%= stylesheet_link_tag    "jquery-ui.min" %>
   <%= stylesheet_link_tag    "jquery-ui.structure.min" %>
   <%= stylesheet_link_tag    "jquery-ui.theme.min" %>
-  
-  <style type="text/css">
-
-    .hidden {
-      display: none;
-    }
-
-  </style>
 
   <script type="text/javascript" charset="utf-8">
 
@@ -28,7 +20,7 @@
       $("#cropbox").Jcrop({
         onChange: update_crop,
         onSelect: update_crop,
-        setSelect: [20,20,120,120]
+        setSelect: [20,20,220,220]
       });
 
       function update_crop(coords) {
@@ -40,14 +32,19 @@
 
       // Type Select Form Manager
 
+      $('#entitytype_entitytype_id').children().eq( 1 ).prop('selected', true);
+
+      $('.typeform').eq( 0 ).show();
+      
       $('#entitytype_entitytype_id').on('change', function (e) {
         var valueSelected = this.value;
         
-        $('.typeform').slideUp();
+        $('.typeform').hide();
         if(valueSelected) {
-          $('.typeform').eq( valueSelected-1 ).slideDown();
+          $('.typeform').eq( valueSelected-1 ).show();
         }
       });
+
 
       // Obtain Family Tree Names
 
@@ -74,19 +71,25 @@
 
 <!-- Picture -->
 
-<div>
-  <%= image_tag @entity.photo.picture.url(:normal), :id => "cropbox" %>
+<div class="photo-wrapper">
+  <div class="photo">
+    <%= image_tag @entity.photo.picture.url(:normal), :id => "cropbox" %>
+  </div>
 </div>
 
 <p>
-  Select an area where the entity is in the picture above.
+  Select an area where the entity is in the picture above, then select a type and optionally fill out the properties.
 </p>
 
 <!-- Entity Type Selection -->
 
-<div class="field">
-  Type
-  <%= collection_select :entitytype, :entitytype_id, Entitytype.all, :id, :name, prompt: true %>
+<div class="row">
+  <div class="columns small-2">
+    Type
+  </div>
+  <div class="columns small-3 end">
+    <%= collection_select :entitytype, :entitytype_id, Entitytype.all, :id, :name, prompt: true %>
+  </div>
 </div>
 
 <!-- Multiple forms, one for each entity type, because each has different -->
@@ -96,14 +99,12 @@
 <!-- Create a different form for each entity type -->
 
 <% Entitytype.all.each do |et| %>
-  <div class="typeform hidden">
-
-    <h3> <%= et.name %> </h3>
+  <div class="typeform hide">
 
     <%= form_for(shallow_args(@entity.photo,@entity)) do |f| %>
       <% if @entity.errors.any? %>
         <div id="error_explanation">
-          <h2><%= pluralize(@entity.errors.count, "error") %> prohibited this entity from being saved:</h2>
+          <h5><%= pluralize(@entity.errors.count, "error") %> prohibited this entity from being saved:</h5>
 
           <ul>
           <% @entity.errors.full_messages.each do |msg| %>
@@ -124,35 +125,44 @@
 
       <% et.propertytypes.each do |pt| %>
         <%= f.fields_for :properties, @entity.properties.build do |g| %>
-
-            <strong> <%= pt.name %>: </strong>      
-            <div class="field">
-              <%= g.label :value %><br>
+          <div class="row">
+            <div class="small-2 columns">
+             <%= pt.name %>  
+            </div>
+            <div class="small-4 columns"> 
               <% if et.name == 'Person' && pt.name == 'Name' %>
                 <%= g.text_field :value, class: 'person_name_input' %>
               <% else %>
                 <%= g.text_field :value %>
               <% end %>
             </div>
-            <div class="field">
-              <%= g.label :certainty %><br>
+            <div class="small-2 columns"> 
+              Certainty
+            </div>
+            <div class="small-4 columns">  
               None
               <%= g.radio_button :certainty, 1 %>
               <%= g.radio_button :certainty, 2 %>
               <%= g.radio_button :certainty, 3 %>
               <%= g.radio_button :certainty, 4 %>
-              <%= g.radio_button :certainty, 5 %>
+              <%= g.radio_button :certainty, 5, { :checked => true } %>
               Absolute
             </div>
+          </div>
             <%= g.hidden_field :entity_id, :value => @entity.id %>
             <%= g.hidden_field :propertytype_id, :value => pt.id %>
 
         <% end %>
       <% end %>
 
-      <div class="actions">
-        <%= f.submit %>
-      </div>
+        <ul class="button-group">
+          <li>
+            <%= link_to 'Back to Photo', @photo, class: "button disabled" %>
+          </li>
+          <li>
+            <%= f.submit 'Identify Entity', class: "button success" %>
+          </li>
+        </ul>
     <% end %>
 
   </div>
@@ -160,7 +170,7 @@
 
 <!-- People data to retrieve with JS -->
 
-<div class="hidden">
+<div class="hide">
   <% @people.each do |p| %>
     <div class="person_data"><%= p.name %></div>
   <% end %>

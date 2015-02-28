@@ -11,3 +11,83 @@
  *= require_self
  *= require_tree .
  */
+
+
+@import url(http://fonts.googleapis.com/css?family=Noto+Sans);
+
+/* Top Bar */
+
+  .top-bar .logo {
+    font-size: 20pt !important;
+    font-weight: 700 !important;
+    font-family: 'Noto Sans', sans-serif !important;
+  }
+
+  .top-bar input {
+      height: auto !important;
+      padding-top: .35rem !important;
+      padding-bottom: .35rem !important;
+      width: auto !important;
+  }
+
+  .top-bar section ul li a {
+    font-size: 11pt !important;
+  }
+
+/* Button Bug fix */
+
+  .button a{
+  	color:white;
+  }
+
+  .button a:hover{
+  	color:white;
+   }
+
+/* Date Form Fix */ 
+
+.Custom-Date-Fix{
+  width: !important;
+}
+
+
+/* Sign - In */
+
+  .sign-in-wrapper {
+  	  margin-left: auto;
+      margin-right: auto;
+      width: 450px;
+      margin-top:150px;
+  }
+
+  .wrapper-devise {
+      font-size: 0.875rem;
+      color: #4D4D4D;
+      cursor: pointer;
+      display: block;
+      font-weight: normal;
+      line-height: 1.5;
+  }
+
+/* ------ */
+
+/* Main Layout */
+
+body {
+  background-color: #085A78 !important;
+}
+
+.wrapper-general {
+  background-color: #FFFFFF !important;
+  min-height: 92%;
+  overflow: hidden;
+  max-width:1024px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  padding-left: 48px;
+  padding-right: 48px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: auto;
+  margin-right: auto;
+}

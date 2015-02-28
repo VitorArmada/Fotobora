@@ -12,4 +12,20 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require_tree .
+//= require_self
+
+
+$(function() {
+
+ $(".alert-box.success").delay(5000).fadeOut(1000);
+
+ $(".close").click(function() {
+ 	$(this).parent().hide();
+ });
+
+ $(".alert-box").click(function() {
+ 	$(this).hide();
+ });
+ 
+});
+

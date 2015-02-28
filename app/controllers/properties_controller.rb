@@ -29,10 +29,10 @@ class PropertiesController < ApplicationController
     respond_to do |format|
       if @property.save
         format.html { redirect_to @property.entity,
-          notice: "Value \"#{@property.value}\" added to \"#{@property.propertytype.name}\"." }
+          notice: "Value \"#{@property.value}\" added to #{@property.propertytype.name}." }
         format.json { render action: 'show', status: :created, location: @property }
       else
-        format.html { render action: 'new' }
+        format.html { redirect_to @property.entity }
         format.json { render json: @property.errors, status: :unprocessable_entity }
       end
     end

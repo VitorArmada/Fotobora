@@ -1,9 +1,6 @@
-
 <% content_for(:title) do %>
-  Import Anotations
+  Import Anotations - 
 <% end %>
-
-<p id="notice"><%= notice %></p>
 
 <h2>
   Import Anotations
@@ -11,14 +8,13 @@
 
 <!-- Picture -->
 
-<div>
-  <%= image_tag @photo.picture.url(:normal) %>
+<div class="photo-wrapper">
+  <div class="photo">
+    <%= image_tag @photo.picture.url(:normal) %>
+  </div>
 </div>
 
 <!-- Navigation -->
-
-<%= link_to 'Back', @photo %>
-
 <div>
   <p>
     Here you can upload an XML file containing annotations that describe the picture above.
@@ -35,8 +31,8 @@
 
 
 <% if ! flash[:errors].nil? && ! flash[:errors].empty? %>
-  <div>
-    <strong>Error(s) occurred:</strong>
+  <div id="error_explanation">
+    <h5>Error(s) occurred:</h5>
     <ul>
       <% flash[:errors].each do |e| %>
         <li> <%= e %> </li>
@@ -46,17 +42,20 @@
 <% end %>
 
 <%= form_tag({action: :import_post}, multipart: true) do %>
-
-  <div class="field">
+  <div class="">
     <p>
       Please choose a file:
     </p>
     <%= file_field_tag :file %>
   </div>
 
-  <div class="actions">
-    <%= submit_tag "Import anotations" %>
-  </div>
-
+  <ul class="button-group">
+    <li>
+      <%= link_to 'Back to Photo', @photo, class: "button disabled" %>
+    </li>
+    <li>
+      <%= submit_tag "Import anotations", class: "button success" %>
+    </li>
+  </ul>
 <% end %>
 

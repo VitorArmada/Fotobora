@@ -31,10 +31,10 @@ class PhotostoriesController < ApplicationController
 
     respond_to do |format|
       if @photostory.save
-        format.html { redirect_to @photostory, notice: 'Photostory was successfully created.' }
+        format.html { redirect_to @photostory, notice: 'Story was successfully created.' }
         format.json { render action: 'show', status: :created, location: @photostory }
       else
-        format.html { render action: 'new' }
+        format.html { redirect_to new_photo_photostory_path(@photo), alert: 'Error(s) found when submitting story:' + @photostory.errors.full_messages.join(", ") }
         format.json { render json: @photostory.errors, status: :unprocessable_entity }
       end
     end
@@ -45,7 +45,7 @@ class PhotostoriesController < ApplicationController
   def update
     respond_to do |format|
       if @photostory.update(photostory_params)
-        format.html { redirect_to @photostory, notice: 'Photostory was successfully updated.' }
+        format.html { redirect_to @photostory, notice: 'Story was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }

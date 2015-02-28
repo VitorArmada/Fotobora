@@ -36,10 +36,10 @@
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="tipoEnt">
-        <xs:restriction base="xs:string"><xs:enumeration value="Vehicle"/><xs:enumeration value="Person"/></xs:restriction>
+        <xs:restriction base="xs:string"><xs:enumeration value="Person"/><xs:enumeration value="Vehicle"/><xs:enumeration value="Place"/><xs:enumeration value="Pet"/><xs:enumeration value="Object"/><xs:enumeration value="Monument"/></xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="tipoProp">
-        <xs:restriction base="xs:string"><xs:enumeration value="Brand"/><xs:enumeration value="Model"/><xs:enumeration value="Name"/><xs:enumeration value="License Plate"/></xs:restriction>
+        <xs:restriction base="xs:string"><xs:enumeration value="Name"/><xs:enumeration value="Brand"/><xs:enumeration value="Model"/><xs:enumeration value="License Plate"/><xs:enumeration value="Owner"/><xs:enumeration value="Name"/><xs:enumeration value="Address"/><xs:enumeration value="Owner"/><xs:enumeration value="Name"/><xs:enumeration value="Owner"/><xs:enumeration value="Description"/><xs:enumeration value="Name"/><xs:enumeration value="Inauguration Date"/></xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="certeza">
         <xs:restriction base="xs:integer">

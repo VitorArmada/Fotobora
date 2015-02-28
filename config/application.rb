@@ -24,5 +24,8 @@ module Fotobora
     # sudo apt-get install wkhtmltopdf
     #config.action_controller.asset_host = "http://localhost:8080"
     config.encoding = "utf-8"
+
+
+    #Paperclip.options[:command_path] = 'C:/PROGRA~1/IMAGEM~1.7-Q'
   end
 end

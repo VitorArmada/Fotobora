@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 gem 'ruby-graphviz'
 
@@ -6,7 +6,7 @@ gem 'nokogiri'
 
 gem 'pdfkit'
 
-gem 'unicorn' # To fix pdfkit issues
+#gem 'unicorn' # To fix pdfkit issues
 
 gem 'paperclip'
 

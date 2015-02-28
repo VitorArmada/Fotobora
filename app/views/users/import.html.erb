@@ -1,17 +1,10 @@
-
 <% content_for(:title) do %>
-  Import Family Tree
+  Import Family Tree - 
 <% end %>
-
-<p id="notice"><%= notice %></p>
 
 <h2>
   Import Family Tree
 </h2>
-
-<!-- Navigation -->
-
-<%= link_to 'Back', @user %>
 
 <div>
   <p>
@@ -25,9 +18,9 @@
     "arvgen" : [
         {
             "nome" : "João Silva",
-            "id" : 3,
+            "id" : 2,
             "idpai" : 1,
-            "idmae" : 2
+            "idmae" : null
         },
         {
             "nome" : "Luís Silva",
@@ -45,8 +38,8 @@
 
 
 <% if ! flash[:errors].nil? && ! flash[:errors].empty? %>
-  <div>
-    <strong>Error(s) occurred:</strong>
+  <div id="error_explanation">
+    <h5>Error(s) occurred:</h5>
     <ul>
       <% flash[:errors].each do |e| %>
         <li> <%= e %> </li>
@@ -56,7 +49,6 @@
 <% end %>
 
 <%= form_tag({action: :import_post}, multipart: true) do %>
-
   <div class="field">
     <p>
       Please choose a file:
@@ -64,8 +56,12 @@
     <%= file_field_tag :file %>
   </div>
 
-  <div class="actions">
-    <%= submit_tag "Import family tree" %>
-  </div>
-
+  <ul class="button-group remove-padding">
+    <li>
+      <%= link_to 'Back', @user, class: "button disabled" %>
+    </li>
+    <li>
+      <%= submit_tag "Import family tree", class: "button success" %>
+    </li>
+  </ul>
 <% end %>

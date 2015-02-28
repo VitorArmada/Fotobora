@@ -33,7 +33,7 @@ class PhotostorycommentsController < ApplicationController
         format.html { redirect_to @photostorycomment.photostory, notice: 'Photostorycomment was successfully created.' }
         format.json { render action: 'show', status: :created, location: @photostorycomment }
       else
-        format.html { render action: 'new' }
+        format.html { redirect_to @photostorycomment.photostory, alert: 'Error found when submitting comment:' + @photostorycomment.errors.full_messages.join(", ") }
         format.json { render json: @photostorycomment.errors, status: :unprocessable_entity }
       end
     end

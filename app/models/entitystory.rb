@@ -3,6 +3,8 @@ class Entitystory < ActiveRecord::Base
   belongs_to :user
   has_many :entitystorycomments
 
+  validates :title, :text, presence: true
+
   def summary_text
   	if text.length > 50
   		"#{text.slice(0,50)}..."
