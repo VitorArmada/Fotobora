@@ -1,0 +1,34 @@
+<p>
+  You searched for: <%= @query %>
+</p>
+
+<h3>Users</h3>
+
+<% if @users.count != 0 %>
+
+  <% @users.each do |user| %>
+      <%= link_to user.email, user %>
+  <% end %>
+
+<% else %>
+  <p>No users matched the query.</p>
+<% end %>
+
+<h3>Photos</h3>
+
+<% if @photos.count != 0 %>
+
+  <% @photos.each do |photo| %>
+    <div>
+      <%= image_tag photo.picture.url(:thumb) %>
+      <%= link_to photo.address, photo %> |
+      by <%= link_to photo.user.email, photo.user %> |
+      <%= photo.date %> |
+      <%= photo.entities.count %> entities |
+      <%= photo.photostories.count %> stories
+    </div>
+  <% end %>
+
+<% else %>
+  <p>No photos matched the query.</p>
+<% end %>

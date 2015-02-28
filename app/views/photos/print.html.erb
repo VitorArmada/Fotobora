@@ -1,0 +1,181 @@
+
+<!-- http://codex.wordpress.org/Styling_for_Print -->
+
+<h1>Photo Details</h1>
+
+<%= image_tag @photo.picture.url(:normal) %>
+
+<p>
+  <strong>Submitted by </strong> <%= @photo.user.email %>
+  <strong> on </strong> <%= @photo.pretty_date_uploaded %></p>
+</p>
+<p><strong>Address: </strong> <%= @photo.user.email %></p>
+<p><strong>Date taken: </strong> <%= @photo.pretty_date_taken %></p>
+<p><strong>Number of Stories: </strong> <%= @photo.photostories.count %></p>
+<p><strong>Number of Entities: </strong> <%= @photo.photostories.count %></p>
+
+<h2>Photo Stories</h2>
+
+<% if @photo.photostories.count == 0 %>
+  <p>No stories submitted.</p>
+<% else %>
+  <table>
+    <tr>
+      <td>ID</td>
+      <td>Title</td>
+      <td>Summary</td>
+      <td>Submitted by</td>
+      <td>Date Submitted</td>
+      <td>Number of Comments</td>
+    </tr>
+    <% @photo.photostories.each do |ps| %>
+    <tr>
+      <td><%= ps.id %></td>
+      <td><%= ps.title %></td>
+      <td><%= ps.summary_text %></td>
+      <td><%= ps.user.email %></td>
+      <td><%= ps.pretty_date %></td>
+      <td><%= ps.photostorycomments.count %></td>
+    </tr>
+    <% end %>
+  </table>
+<% end %>
+
+<h2>Entities</h2>
+<% if @photo.entities.count == 0 %>
+  <p>No entities identified.</p>
+<% else %>
+  <table>
+    <tr>
+      <td>ID</td>
+      <td>Type</td>
+      <td></td>
+      <td>Identified by</td>
+      <td>Date Identified</td>
+      <td>Number of Stories</td>
+    </tr>
+    <% @photo.entities.each do |e| %>
+    <tr>
+      <td><%= e.id %></td>
+      <td><%= e.entitytype.name %></td>
+      <td><%= e.summary_label %></td>
+      <td><%= e.user.email %></td>
+      <td><%= e.pretty_date %></td>
+      <td><%= e.entitystories.count %></td>
+    </tr>
+    <% end %>
+  </table>
+<% end %>
+
+<% if @photo.photostories.count == 0 %>
+<% else %>
+  <h2>Photo Stories (Detailed)</h2>
+
+    <% @photo.photostories.each do |ps| %>
+
+      <h3>(#<%= ps.id %>) <%= ps.title %></h3>
+
+      <p>
+        <strong>by </strong><%= ps.user.email %>
+        <strong> on </strong><%= ps.pretty_date %>
+      </p>
+      
+      <p>
+        <%= ps.text %>
+      </p>
+
+      <% if ps.photostorycomments.count == 0 %>
+      <% else %>
+        <h4>Comments:</h4>
+
+        <% ps.photostorycomments.each do |c| %>
+
+          <p>
+            [<%= c.pretty_date %>]
+            <strong> <%= c.user.email %>:</strong>
+            <%= c.text %>
+          </p> 
+
+        <% end %>
+      <% end %>
+
+    <% end %>
+<% end %>
+
+<% if @photo.entities.count == 0 %>
+<% else %>
+<h2>Entities (Detailed)</h2>
+
+  <% @photo.entities.each do |e| %>
+
+    <h3>(#<%= e.id %>) <%= e.full_label %></h3>
+
+    <p>
+      <strong>by </strong><%= e.user.email %>
+      <strong> on </strong><%= e.pretty_date %>
+    </p>
+    
+    <p><strong>Type: </strong><%= e.entitytype.name %></p>
+
+    <h4>Properties:</h4>
+
+    <% if e.properties.count == 0 %>
+      <p>No property values defined.</p>
+    <% else %>
+      <table>
+        <tr>
+          <td>Type</td>
+          <td>Value</td>
+          <td>Current Score</td>
+          <td>Initial Score</td>
+        </tr>
+        <% e.properties
+          .sort_by { |x| [x.propertytype.name,-(x.votes.count + x.certainty),x.value] }
+          .each do |p| %>
+        <tr>
+          <td><%= p.propertytype.name %></td>
+          <td><%= p.value %></td>
+          <td><%= p.votes.count + p.certainty %></td>
+          <td><%= p.certainty %></td>
+        </tr>
+        <% end %>
+      </table>  
+    <% end %>
+
+    <% if e.entitystories.count == 0 %>
+    <% else %>
+      <h4>Stories:</h4>
+
+        <% e.entitystories.each do |es| %>
+
+          <h3><%= es.title %></h3>
+
+          <p>
+            <strong>by </strong><%= es.user.email %>
+            <strong> on </strong><%= es.pretty_date %>
+          </p>
+          
+          <p>
+            <%= es.text %>
+          </p>
+
+          <h4>Comments:</h4>
+
+          <% if es.entitystorycomments.count == 0 %>
+            <p>No comments submitted.</p>
+          <% else %>
+            <% es.entitystorycomments.each do |c| %>
+
+              <p>
+                [<%= c.pretty_date %>]
+                <strong> <%= c.user.email %>:</strong>
+                <%= c.text %>
+              </p> 
+
+            <% end %>
+          <% end %>
+
+    <% end %>
+<% end %>
+<% end %>
+<% end %>

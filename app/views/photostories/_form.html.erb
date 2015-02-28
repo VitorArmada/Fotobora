@@ -1,0 +1,105 @@
+<% content_for(:head) do %>
+  
+  <style type="text/css">
+  </style>
+
+  <%= javascript_include_tag "jquery.imagemapster.min" %>
+
+  <script type="text/javascript">
+
+    $(document).ready(function() {
+
+      var inArea;
+      var img = $('#picture');
+
+      var all_opts = {
+          stroke: true,
+          strokeWidth: 1,
+          strokeColor: 'ffffff',
+          strokeOpacity: 0.4,
+          fillOpacity: 0
+      };
+      var single_opts = {
+          stroke: true,
+          strokeWidth: 2,
+          strokeColor: 'ffffff',
+          strokeOpacity: 0.6
+      };
+      var initial_opts = {
+          isSelectable: false,
+          clickNavigate: false,
+          onMouseover: function (data) {
+              inArea = true;
+          },
+          onMouseout: function (data) {
+              inArea = false;
+          }
+      };
+      var opts = $.extend({}, all_opts, initial_opts, single_opts);
+
+      // Bind to the image 'mouseover' and 'mouseout' events to activate or deactivate ALL the areas. Check whether an area has been activated with "inArea" - IE<9 fires "onmouseover" again for the image when entering an area, so all areas would stay highlighted when entering a specific area in those browsers otherwise. It makes no difference for other browsers.
+
+     img.mapster('unbind')
+            .mapster(opts)
+            .bind('mouseover', function () {
+                if (!inArea) {
+                    img.mapster('set_options', all_opts);
+                    $("area").mapster('set', true);
+                    img.mapster('set_options', single_opts);
+                }
+            }).bind('mouseout', function () {
+                if (!inArea) {
+                    $("area").mapster('set', false);
+                }
+            });
+
+    });
+
+</script>
+
+<% end %>
+
+<!-- Picture -->
+
+<div>
+  <%= image_tag @photostory.photo.picture.url(:normal),
+    :id => "picture",
+    :usemap => "#map" %>
+  <map name="map" id="map">
+    <% @photostory.photo.entities.each do |e| %>
+      <area
+        shape="rect"
+        coords="<%= e.x1 %>,<%= e.y1 %>,<%= e.x2 %>,<%= e.y2 %>"
+        href="<%= url_for(e) %>"
+        title="<%= e.full_label %>"/>
+    <% end %>
+  </map>
+</div>
+
+<!-- Form -->
+
+<%= form_for(shallow_args(@photostory.photo,@photostory)) do |f| %>
+  <% if @photostory.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@photostory.errors.count, "error") %> prohibited this photostory from being saved:</h2>
+
+      <ul>
+      <% @photostory.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </div>
+  <div class="field">
+    <%= f.label :text %><br>
+    <%= f.text_area :text, cols: 60, rows: 10 %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Create Story" %>
+  </div>
+<% end %>

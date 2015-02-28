@@ -1,0 +1,62 @@
+
+<% content_for(:title) do %>
+  Import Anotations
+<% end %>
+
+<p id="notice"><%= notice %></p>
+
+<h2>
+  Import Anotations
+</h2>
+
+<!-- Picture -->
+
+<div>
+  <%= image_tag @photo.picture.url(:normal) %>
+</div>
+
+<!-- Navigation -->
+
+<%= link_to 'Back', @photo %>
+
+<div>
+  <p>
+    Here you can upload an XML file containing annotations that describe the picture above.
+  </p>
+  <p>
+    The XML file is validated against
+    <%= link_to "this XML schema.", "/Schema.xsd" %>
+    Any validations errors that might occur will be displayed here.  
+  </p>
+  <p>
+    The schema was last updated on <%= flash[:schema_updated_at] %>.
+  </p>
+</div>
+
+
+<% if ! flash[:errors].nil? && ! flash[:errors].empty? %>
+  <div>
+    <strong>Error(s) occurred:</strong>
+    <ul>
+      <% flash[:errors].each do |e| %>
+        <li> <%= e %> </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_tag({action: :import_post}, multipart: true) do %>
+
+  <div class="field">
+    <p>
+      Please choose a file:
+    </p>
+    <%= file_field_tag :file %>
+  </div>
+
+  <div class="actions">
+    <%= submit_tag "Import anotations" %>
+  </div>
+
+<% end %>
+

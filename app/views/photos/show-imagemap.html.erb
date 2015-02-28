@@ -1,0 +1,110 @@
+<% content_for(:head) do %>
+  
+  <style type="text/css">
+
+    #picturemap area {
+      border: solid 12px #000;
+      display: inline !important;
+    }
+
+  </style>
+
+<% end %>
+
+<% content_for(:title) do %>
+  View Photo
+<% end %>
+
+<p id="notice"><%= notice %></p>
+
+<h2>
+  Photo
+</h2>
+
+<!-- Picture -->
+
+<div>
+  <%= image_tag @photo.picture.url(:normal), :usemap => "picturemap", :id => "picture" %>
+  <map name="picturemap" id="picturemap">
+    <% @photo.entities.each do |e| %>
+      <area
+        shape="rect"
+        coords="<%= e.x1 %>,<%= e.y1 %>,<%= e.x2 %>,<%= e.y2 %>"
+        href="<%= url_for(e) %>"
+        title="<%= e.summary_label %>"/>
+    <% end %>
+  </map>
+</div>
+
+<!-- Navigation -->
+
+<%= link_to 'Edit', edit_photo_path(@photo) %>
+
+<!-- Basic Details -->
+
+<p>
+  <strong>by</strong> <%= link_to @photo.user.email, user_path(@photo.user) %>
+</p>
+
+<p>
+  <strong>Address:</strong>
+  <%= @photo.address %>
+</p>
+
+<p>
+  <strong>Photographed on:</strong>
+  <%= @photo.pretty_date_taken  %>
+</p>
+
+<p>
+  <strong>Uploaded on:</strong>
+  <%= @photo.pretty_date_uploaded  %>
+</p>
+
+<!-- Entities -->
+
+<div>
+  <strong> Entities: </strong>
+  <% if not( @photo.entities.empty? ) %>
+    <div>
+      <% @photo.entities.each do |e| %>
+        <div>
+          <strong> <%= link_to "(#{e.entitytype.name}) #{e.summary_label}", entity_path(e) %> </strong>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div>
+      No entities available. Be the first to add one!
+    </div>
+  <% end %>
+  <div>
+  	<%= link_to "Identify Entity", new_photo_entity_path(@photo) %>
+  </div>
+</div>
+
+<!-- Stories -->
+
+<div>
+  <strong> Stories: </strong>
+  <% if not( @photo.photostories.empty? ) %>
+    <div>
+      <% @photo.photostories.each do |ps| %>
+        <div>
+          <strong> <%= link_to ps.title, photostory_path(ps) %> </strong>
+          | by <%= ps.user.email %>
+          | <%= ps.pretty_date %>
+          | <%= ps.photostorycomments.count %> comments
+          | <i>"<%= ps.summary_text %>"</i>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div>
+      No stories available. Be the first to add one!
+    </div>
+  <% end %>
+  <div>
+  	<%= link_to "Create Story", new_photo_photostory_path(@photo) %>
+  </div>
+</div>

@@ -1,0 +1,167 @@
+<% content_for(:head) do %>
+  
+  <%= stylesheet_link_tag "jquery.Jcrop.min" %>
+  <%= javascript_include_tag "jquery.Jcrop.min" %>
+
+  <%= javascript_include_tag "jquery.color" %>
+  <%= javascript_include_tag "jquery-ui.min" %>
+  
+  <%= stylesheet_link_tag    "jquery-ui.min" %>
+  <%= stylesheet_link_tag    "jquery-ui.structure.min" %>
+  <%= stylesheet_link_tag    "jquery-ui.theme.min" %>
+  
+  <style type="text/css">
+
+    .hidden {
+      display: none;
+    }
+
+  </style>
+
+  <script type="text/javascript" charset="utf-8">
+
+
+    $(document).ready(function() {
+
+      // Picture Area Selection
+
+      $("#cropbox").Jcrop({
+        onChange: update_crop,
+        onSelect: update_crop,
+        setSelect: [20,20,120,120]
+      });
+
+      function update_crop(coords) {
+        $(".coord_x1").val(coords.x);
+        $(".coord_y1").val(coords.y);
+        $(".coord_x2").val(coords.x + coords.w);
+        $(".coord_y2").val(coords.y + coords.h);
+      }
+
+      // Type Select Form Manager
+
+      $('#entitytype_entitytype_id').on('change', function (e) {
+        var valueSelected = this.value;
+        
+        $('.typeform').slideUp();
+        if(valueSelected) {
+          $('.typeform').eq( valueSelected-1 ).slideDown();
+        }
+      });
+
+      // Obtain Family Tree Names
+
+      var people = []
+
+      $('.person_data').each(function() {
+        people.push( $(this).text() )
+      });
+
+      $('.person_name_input').autocomplete({
+        source: people,
+        minLength: 0
+      });
+
+      $('.person_name_input').click(function() {
+        $(this).autocomplete( "search", $(this).val() )
+      });
+
+    });
+
+  </script>
+
+<% end %>
+
+<!-- Picture -->
+
+<div>
+  <%= image_tag @entity.photo.picture.url(:normal), :id => "cropbox" %>
+</div>
+
+<p>
+  Select an area where the entity is in the picture above.
+</p>
+
+<!-- Entity Type Selection -->
+
+<div class="field">
+  Type
+  <%= collection_select :entitytype, :entitytype_id, Entitytype.all, :id, :name, prompt: true %>
+</div>
+
+<!-- Multiple forms, one for each entity type, because each has different -->
+<!-- properties. The collecton_select above will be used to choose which form -->
+<!-- to display at each time. -->
+
+<!-- Create a different form for each entity type -->
+
+<% Entitytype.all.each do |et| %>
+  <div class="typeform hidden">
+
+    <h3> <%= et.name %> </h3>
+
+    <%= form_for(shallow_args(@entity.photo,@entity)) do |f| %>
+      <% if @entity.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@entity.errors.count, "error") %> prohibited this entity from being saved:</h2>
+
+          <ul>
+          <% @entity.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= f.hidden_field :x1, :class => "coord_x1" %>
+      <%= f.hidden_field :x2, :class => "coord_x2" %>
+      <%= f.hidden_field :y1, :class => "coord_y1" %>
+      <%= f.hidden_field :y2, :class => "coord_y2" %>
+
+      <%= f.hidden_field :entitytype_id, :value => et.id %>
+
+      <!-- Nested atributes for the initial property values: -->
+
+      <% et.propertytypes.each do |pt| %>
+        <%= f.fields_for :properties, @entity.properties.build do |g| %>
+
+            <strong> <%= pt.name %>: </strong>      
+            <div class="field">
+              <%= g.label :value %><br>
+              <% if et.name == 'Person' && pt.name == 'Name' %>
+                <%= g.text_field :value, class: 'person_name_input' %>
+              <% else %>
+                <%= g.text_field :value %>
+              <% end %>
+            </div>
+            <div class="field">
+              <%= g.label :certainty %><br>
+              None
+              <%= g.radio_button :certainty, 1 %>
+              <%= g.radio_button :certainty, 2 %>
+              <%= g.radio_button :certainty, 3 %>
+              <%= g.radio_button :certainty, 4 %>
+              <%= g.radio_button :certainty, 5 %>
+              Absolute
+            </div>
+            <%= g.hidden_field :entity_id, :value => @entity.id %>
+            <%= g.hidden_field :propertytype_id, :value => pt.id %>
+
+        <% end %>
+      <% end %>
+
+      <div class="actions">
+        <%= f.submit %>
+      </div>
+    <% end %>
+
+  </div>
+<% end %>
+
+<!-- People data to retrieve with JS -->
+
+<div class="hidden">
+  <% @people.each do |p| %>
+    <div class="person_data"><%= p.name %></div>
+  <% end %>
+</div>

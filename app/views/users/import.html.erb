@@ -1,0 +1,71 @@
+
+<% content_for(:title) do %>
+  Import Family Tree
+<% end %>
+
+<p id="notice"><%= notice %></p>
+
+<h2>
+  Import Family Tree
+</h2>
+
+<!-- Navigation -->
+
+<%= link_to 'Back', @user %>
+
+<div>
+  <p>
+    Here you can upload a file containing a family tree in a format based on JSON. This family tree will replace your current family tree, if you already have one.
+  </p>
+  <p>
+    The file should be formatted according the following example:  
+  </p>
+  <pre>
+{
+    "arvgen" : [
+        {
+            "nome" : "João Silva",
+            "id" : 3,
+            "idpai" : 1,
+            "idmae" : 2
+        },
+        {
+            "nome" : "Luís Silva",
+            "id" : 1,
+            "idpai" : null,
+            "idmae" : null
+        }
+    ]
+}
+  </pre>
+  <p>
+    Use the form to submit the file. Any errors will be displayed here.
+  </p>
+</div>
+
+
+<% if ! flash[:errors].nil? && ! flash[:errors].empty? %>
+  <div>
+    <strong>Error(s) occurred:</strong>
+    <ul>
+      <% flash[:errors].each do |e| %>
+        <li> <%= e %> </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_tag({action: :import_post}, multipart: true) do %>
+
+  <div class="field">
+    <p>
+      Please choose a file:
+    </p>
+    <%= file_field_tag :file %>
+  </div>
+
+  <div class="actions">
+    <%= submit_tag "Import family tree" %>
+  </div>
+
+<% end %>

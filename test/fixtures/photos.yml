@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  address: MyString
+  date: 2014-05-17 12:24:18
+  user_id: 
+
+two:
+  address: MyString
+  date: 2014-05-17 12:24:18
+  user_id: 

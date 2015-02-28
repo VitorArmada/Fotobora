@@ -1,0 +1,114 @@
+<% content_for(:head) do %>
+  
+  <style type="text/css">
+
+    .hidden {
+      display: none;
+    }
+
+  </style>
+
+  <%= javascript_include_tag "jquery.imagemapster.min" %>
+
+  <script type="text/javascript">
+
+    $(document).ready(function() {
+
+      // Image Area Highlighter
+
+      $('#picture').mapster({
+          isSelectable: false,
+          stroke: true,
+          strokeWidth: 1,
+          strokeColor: 'ffffff',
+          strokeOpacity: 0.3,
+          fillOpacity: 0
+      });
+
+      $("area").mapster('set', true);
+
+      // Form Manager
+
+      $(".toggle").click(function() {
+        $(".panel").slideUp();
+        $(this).next(".panel").slideDown();
+      });
+
+    });
+
+  </script>
+
+<% end %>
+
+<p id="notice"><%= notice %></p>
+
+<!-- Image -->
+
+<div>
+  <%= image_tag @entitystory.entity.photo.picture.url(:normal),
+    :id => "picture",
+    :usemap => "#map" %>
+  <map name="map" id="map">
+    <area
+      shape="rect"
+      coords="<%= @entitystory.entity.x1 %>,<%= @entitystory.entity.y1 %>,<%= @entitystory.entity.x2 %>,<%= @entitystory.entity.y2 %>"
+      href=""
+      title="<%= @entitystory.entity.full_label %>">
+  </map>
+</div>
+
+<h2>
+  <%= @entitystory.title %>
+</h2>
+
+<p>
+  Submitted on
+  <%= @entitystory.pretty_date %>
+  by
+  <%= link_to @entitystory.user.email, @entitystory.user %>
+</p>
+
+<%= link_to 'Edit', edit_entitystory_path(@entitystory) %> |
+<%= link_to 'Back', @entitystory.entity %>
+
+<p>
+  <%= @entitystory.text %>
+</p>
+
+<div>
+  <strong>Comments: </strong>
+  <div>
+    <% @entitystory.entitystorycomments.each do |c| %>
+      <div>
+        <div> <%= c.user.email %> on <%= c.pretty_date %>: </div>
+        <div> <%= c.text %> </div>
+      </div>
+    <% end %>
+  </div>
+  <div>
+    <strong>New Comment: </strong>
+    <%= form_for(@entitystorycomment) do |f| %>
+      <% if @entitystorycomment.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@entitystorycomment.errors.count, "error") %> prohibited this entitystorycomment from being saved:</h2>
+
+          <ul>
+          <% @entitystorycomment.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="field">
+        <%= f.text_area :text %>
+      </div>
+
+      <%= f.hidden_field :entitystory_id, :value => @entitystory.id %>
+
+      <div class="actions">
+        <%= f.submit "Submit Comment" %>
+      </div>
+    <% end %>
+  </div>
+</div>

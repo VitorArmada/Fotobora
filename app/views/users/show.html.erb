@@ -1,0 +1,47 @@
+<p id="notice"><%= notice %></p>
+
+<h2>
+  User
+</h2>
+
+<!-- User Details -->
+
+<div>
+  <p>Email: <%= @user.email %></p>
+  <p>Registered on: <%= @user.created_at.to_formatted_s(:short) %></p>
+</div>
+
+<!-- Actions -->
+
+<div>
+  <%= link_to "Import Family Tree", import_user_path(@user) %>
+</div>
+<div>
+  <%= link_to "Upload Picture", new_photo_path %>
+</div>
+
+<!-- Listing Photos -->
+
+<h3>Photos</h3>
+<div>
+  <% @user.photos.each do |photo| %>
+    <div>
+      <%= image_tag photo.picture.url(:small) %>
+      <%= link_to photo.address, photo %> |
+      <%= photo.date %> |
+      <%= photo.entities.count %> entities |
+      <%= photo.photostories.count %> stories
+    </div>
+  <% end %>
+</div>
+
+<!-- Family Tree -->
+
+<h3>Family Tree</h3>
+<% if @user.gentree.exists? %>
+  <%= image_tag @user.gentree %>
+<% else %>
+  <p>You haven't uploaded a family tree yet.</p>
+<% end %>
+<div>
+</div>

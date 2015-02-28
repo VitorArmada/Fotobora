@@ -1,0 +1,219 @@
+<% content_for(:head) do %>
+  
+  <style type="text/css">
+
+    .hidden {
+      display: none;
+    }
+
+  </style>
+
+  <%= javascript_include_tag "jquery.imagemapster.min" %>
+  <%= javascript_include_tag "jquery.color" %>
+  <%= javascript_include_tag "jquery-ui.min" %>
+  
+  <%= stylesheet_link_tag    "jquery-ui.min" %>
+  <%= stylesheet_link_tag    "jquery-ui.structure.min" %>
+  <%= stylesheet_link_tag    "jquery-ui.theme.min" %>
+
+  <script type="text/javascript">
+
+    $(document).ready(function() {
+
+      // Image Area Highlighter
+
+      $('#picture').mapster({
+          isSelectable: false,
+          stroke: true,
+          stroke: true,
+          strokeWidth: 2,
+          strokeColor: 'ffffff',
+          strokeOpacity: 0.6,
+          fillOpacity: 0
+      });
+
+      $("area").mapster('set', true);
+
+      // Form Manager
+
+      $(".toggle").click(function() {
+        $(".panel").slideUp();
+        $(this).next(".panel").slideDown();
+      });
+
+      // Obtain Family Tree Names
+
+      var people = []
+
+      $('.person_data').each(function() {
+        people.push( $(this).text() )
+      });
+
+      $('.person_name_input').autocomplete({
+        source: people,
+        minLength: 0
+      });
+
+      $('.person_name_input').click(function() {
+        $(this).autocomplete( "search", $(this).val() )
+      });
+
+    });
+
+  </script>
+
+<% end %>
+
+<% content_for(:title) do %>
+  View Entity
+<% end %>
+
+<p id="notice"><%= notice %></p>
+
+<h2>
+  <%= @entity.entitytype.name %> (<%= @entity.summary_label %>)
+</h2>
+
+<!-- Image -->
+
+<div>
+  <%= image_tag @entity.photo.picture.url(:normal),
+    :id => "picture",
+    :usemap => "#map" %>
+  <map name="map" id="map">
+    <area
+      shape="rect"
+      coords="<%= @entity.x1 %>,<%= @entity.y1 %>,<%= @entity.x2 %>,<%= @entity.y2 %>"
+      href=""
+      title="<%= @entity.full_label %>">
+  </map>
+</div>
+
+
+<%= link_to 'Back', @entity.photo %>
+
+<!-- Basic Details -->
+
+<p>
+  <strong>Identified by:</strong>
+  <%= link_to @entity.user.email, @entity.user %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @entity.entitytype.name %>
+</p>
+
+<!-- Property Values and Forms -->
+
+<div>
+  <% @entity.valid_propertytypes.each do |pt| %>
+
+    <div>
+      <strong> <%= pt.name %>: </strong>
+      <%= @entity.best_property_value(pt.id) %>
+      <button class="toggle">Related Options</button>
+      <div class="panel hidden">
+        <div class="poll">
+          <strong> >Poll: </strong>
+          <% if @entity.has_property_values?(pt.id) %>
+
+            <%= form_for(@vote) do |f| %>      
+              <% @entity.get_property_values(pt.id).each do |property| %>
+
+                <%= f.radio_button :property_id, property.id %>
+                <% if property.user_has_voted_on_it?( current_user.id ) %>
+                  ✓
+                <% end %>
+                <strong>
+                  <%= property.value %>
+                  (<%= property.votes.count + property.certainty %>)
+                </strong>
+              <% end %>
+              <div class="actions">
+                <%= f.submit "Vote" %>
+              </div>
+            <% end %>
+          <% else %>
+            No values available. Be the first to add one!
+          <% end %>
+        </div>
+        <div>
+          <strong> >New <%= pt.name %>: </strong>
+          <%= form_for(@property) do |f| %>
+            <% if @property.errors.any? %>
+              <div id="error_explanation">
+                <h2><%= pluralize(@property.errors.count, "error") %> prohibited this property from being saved:</h2>
+
+                <ul>
+                <% @property.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+                <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <div class="field">
+              <%= f.label :value %><br>
+              <% if @entity.entitytype.name == 'Person' && pt.name == 'Name' %>
+                <%= f.text_field :value, class: 'person_name_input' %>
+              <% else %>
+                <%= f.text_field :value %>
+              <% end %>
+            </div>
+            <div class="field">
+              <%= f.label :certainty %><br>
+              None
+              <%= f.radio_button :certainty, 1 %>
+              <%= f.radio_button :certainty, 2 %>
+              <%= f.radio_button :certainty, 3 %>
+              <%= f.radio_button :certainty, 4 %>
+              <%= f.radio_button :certainty, 5 %>
+              Absolute
+            </div>
+            <%= f.hidden_field :entity_id, :value => @entity.id %>
+            <%= f.hidden_field :propertytype_id, :value => pt.id %>
+
+            <div class="actions">
+              <%= f.submit %>
+            </div>
+          <% end %>
+        </div class="form">
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<!-- Stories -->
+
+<div>
+  <strong> Stories: </strong>
+  <% if not( @entity.entitystories.empty? ) %>
+    <div>
+      <% @entity.entitystories.each do |es| %>
+        <div>
+          <strong> <%= link_to es.title, entitystory_path(es) %> </strong>
+          | by <%= es.user.email %>
+          | <%= es.pretty_date %>
+          | <%= es.entitystorycomments.count %> comments
+          | <i>"<%= es.summary_text %>"</i>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div>
+      No stories available. Be the first to add one!
+    </div>
+  <% end %>
+  <div>
+    <%= link_to "Create Story", new_entity_entitystory_path(@entity) %>
+  </div>
+</div>
+
+<!-- People data to retrieve with JS -->
+
+<div class="hidden">
+  <% @people.each do |p| %>
+    <div class="person_data"><%= p.name %></div>
+  <% end %>
+</div>

@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  x1: 1
+  x2: 1
+  y1: 1
+  y2: 1
+  user_id: 
+  photo_id: 
+  entitytype_id: 
+
+two:
+  x1: 1
+  x2: 1
+  y1: 1
+  y2: 1
+  user_id: 
+  photo_id: 
+  entitytype_id: 
