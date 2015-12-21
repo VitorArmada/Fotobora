@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Entity:</strong>
+  <%= @votetype.entity %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @votetype.user %>
+</p>
+
+<p>
+  <strong>Entitytype:</strong>
+  <%= @votetype.entitytype %>
+</p>
+
+<p>
+  <strong>Value:</strong>
+  <%= @votetype.value %>
+</p>
+
+<%= link_to 'Edit', edit_votetype_path(@votetype) %> |
+<%= link_to 'Back', votetypes_path %>

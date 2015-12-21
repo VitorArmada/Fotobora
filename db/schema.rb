@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140624163414) do
+ActiveRecord::Schema.define(version: 20151127164650) do
 
   create_table "entities", force: true do |t|
     t.integer  "x1"
@@ -20,14 +20,20 @@ ActiveRecord::Schema.define(version: 20140624163414) do
     t.integer  "y2"
     t.integer  "user_id"
     t.integer  "photo_id"
-    t.integer  "entitytype_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "entities", ["entitytype_id"], name: "index_entities_on_entitytype_id"
   add_index "entities", ["photo_id"], name: "index_entities_on_photo_id"
   add_index "entities", ["user_id"], name: "index_entities_on_user_id"
+
+  create_table "entities_entitytypes", id: false, force: true do |t|
+    t.integer "entity_id"
+    t.integer "entitytype_id"
+  end
+
+  add_index "entities_entitytypes", ["entity_id"], name: "index_entities_entitytypes_on_entity_id"
+  add_index "entities_entitytypes", ["entitytype_id"], name: "index_entities_entitytypes_on_entitytype_id"
 
   create_table "entitystories", force: true do |t|
     t.string   "title"
@@ -55,10 +61,12 @@ ActiveRecord::Schema.define(version: 20140624163414) do
   create_table "entitytypes", force: true do |t|
     t.string   "name"
     t.integer  "propertytype_id"
+    t.integer  "entitytype_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "entitytypes", ["entitytype_id"], name: "index_entitytypes_on_entitytype_id"
   add_index "entitytypes", ["propertytype_id"], name: "index_entitytypes_on_propertytype_id"
 
   create_table "people", force: true do |t|
@@ -132,6 +140,19 @@ ActiveRecord::Schema.define(version: 20140624163414) do
 
   add_index "propertytypes", ["entitytype_id"], name: "index_propertytypes_on_entitytype_id"
 
+  create_table "requests", force: true do |t|
+    t.string   "title"
+    t.text     "text"
+    t.datetime "date"
+    t.integer  "photo_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "requests", ["photo_id"], name: "index_requests_on_photo_id"
+  add_index "requests", ["user_id"], name: "index_requests_on_user_id"
+
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
@@ -161,11 +182,25 @@ ActiveRecord::Schema.define(version: 20140624163414) do
   create_table "votes", force: true do |t|
     t.integer  "property_id"
     t.integer  "user_id"
+    t.integer  "certainty"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "votes", ["property_id"], name: "index_votes_on_property_id"
   add_index "votes", ["user_id"], name: "index_votes_on_user_id"
+
+  create_table "votetypes", force: true do |t|
+    t.integer  "entity_id"
+    t.integer  "user_id"
+    t.integer  "entitytype_id"
+    t.integer  "value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "votetypes", ["entity_id"], name: "index_votetypes_on_entity_id"
+  add_index "votetypes", ["entitytype_id"], name: "index_votetypes_on_entitytype_id"
+  add_index "votetypes", ["user_id"], name: "index_votetypes_on_user_id"
 
 end

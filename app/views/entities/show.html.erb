@@ -16,6 +16,57 @@
   View Entity - 
 <% end %>
 
+
+ <script type="text/javascript" charset="utf-8">
+
+
+    $(document).ready(function() {
+
+      // Type Select Form Manager
+
+      $('.typeform').eq( 0 ).show();
+
+      $(".typeformlist").hide();
+
+      $('#entitytype_entitytype_id').children().eq( 1 ).prop('selected', true);
+     
+      $('#button_add').click(function(event){
+        event.preventDefault();
+        $('.typeformlist').toggle();
+      });  
+    
+      $('#entitytype_entitytype_id').on('change', function (e) {
+        var valueSelected = this.value;
+        
+        $('.typeform').hide();
+
+        if(valueSelected) {
+          $('input#entity_entitytype_ids[value="' + valueSelected + '"]').closest('.typeform').show();
+        }
+      });
+
+
+      // Obtain Family Tree Names
+
+      var people = []
+
+      $('.person_data').each(function() {
+        people.push( $(this).text() )
+      });
+
+      $('.person_name_input').autocomplete({
+        source: people,
+        minLength: 0
+      });
+
+      $('.person_name_input').click(function() {
+        $(this).autocomplete( "search", $(this).val() )
+      });
+
+    });
+
+  </script>
+
 <!-- Image -->
 
 <div class="photo-wrapper">
@@ -42,8 +93,91 @@
   <li>
     <%= link_to "Create Story", new_entity_entitystory_path(@entity), class: "button" %>
   </li>
+    <li>
+    <%= button_tag "Add New Entity Type", class: "button", id: "button_add" %>
+  </li>
 </ul>
 
+<!-- Entity Type Selection -->
+
+<div class="typeformlist">
+
+  <div class="row">
+    <div class="columns small-2">
+      Type
+    </div>
+    <div class="columns small-3 end">
+      <%= collection_select :entitytype, :entitytype_id, Entitytype.where.not(id: @entity.entitytypes.map(&:id)), :id, :name, prompt: true %>
+    </div>
+  </div>
+
+  <% current_entity_id = @entity.id %>
+
+  <% Entitytype.where.not(id: @entity.entitytypes.map(&:id)).each do |et| %>
+    <div class="typeform hide">
+
+      <%= form_for(shallow_args(@entity.photo,@entity), :url => {:action => "add_entity_type"})  do |f| %>
+        <% if @entity.errors.any? %>
+          <div id="error_explanation">
+            <h5><%= pluralize(@entity.errors.count, "error") %> prohibited this entity from being saved:</h5>
+
+            <ul>
+            <% @entity.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <%= f.hidden_field :current_id, :value => current_entity_id %>
+
+        <%= f.hidden_field :entitytype_ids, :multiple => true, :value => et.id %>
+
+        <!-- Nested atributes for the initial property values: -->
+
+        <% et.valid_propertytypes.each do |pt| %>
+          <%= f.fields_for :properties, @entity.properties.build do |g| %>
+            <div class="row">
+              <div class="small-2 columns">
+               <%= pt.name %>  
+              </div>
+              <div class="small-4 columns"> 
+                <% if et.name == 'Person' && pt.name == 'Name' %>
+                  <%= g.text_field :value, class: 'person_name_input' %>
+                <% else %>
+                  <%= g.text_field :value %>
+                <% end %>
+              </div>
+              <div class="small-2 columns"> 
+                Certainty
+              </div>
+              <div class="small-4 columns">  
+                None
+                <%= g.radio_button :certainty, 1 %>
+                <%= g.radio_button :certainty, 2 %>
+                <%= g.radio_button :certainty, 3 %>
+                <%= g.radio_button :certainty, 4 %>
+                <%= g.radio_button :certainty, 5, { :checked => true } %>
+                Absolute
+              </div>
+            </div>
+              <%= g.hidden_field :entity_id, :value => current_entity_id %>
+              <%= g.hidden_field :propertytype_id, :value => pt.id %>
+
+          <% end %>
+        <% end %>
+
+          <ul class="button-group">
+            <li>
+              <%= f.submit 'Add Entity Type', class: "button success" %>
+            </li>
+          </ul>
+      <% end %>
+
+    </div>
+  <% end %>
+
+</div>
 
 <!-- Basic Details -->
 
@@ -52,18 +186,53 @@
   <%= link_to @entity.user.email, @entity.user %>
 </p>
 
-<p>
-  <strong>Type:</strong>
-  <%= @entity.entitytype.name %>
-</p>
+</br>
 
-<!-- Property Values and Forms -->
+<% @entitytypes.each do |et| %>
 
-<hr/>
-<h4> Properties </h4>
+  <strong size="20">Type:</strong> <%= et.name %> (<%= Votetype.where( "entity_id = ? and entitytype_id = ?", @entity.id, et.id ).map{ |vt| vt.value }.reduce(:+) || 0 %>)
 
+  <div style="margin-bottom:-40px"> 
+
+ <%= form_for(@votetype) do |vt| %>  
+
+    <%= vt.hidden_field :entity_id, :value => @entity.id %>
+    <%= vt.hidden_field :user_id, :value => current_user.id %>
+    <%= vt.hidden_field :entitytype_id, :value => et.id %>
+    <%= vt.hidden_field :value, :value => 1 %>
+    <% if (Votetype.where( "user_id = ? and entity_id = ? and entitytype_id = ?", current_user.id, @entity.id, et.id ).first.try(:value) == 1) %> 
+      <%= vt.submit "", class: "upvoteon" %>
+    <% else %>
+      <%= vt.submit "", class: "upvote" %>
+    <% end %>
+
+ <% end %>
+
+
+ <%= form_for(@votetype) do |vt| %>  
+
+    <%= vt.hidden_field :entity_id, :value => @entity.id %>
+    <%= vt.hidden_field :user_id, :value => current_user.id %>
+    <%= vt.hidden_field :entitytype_id, :value => et.id %>
+    <%= vt.hidden_field :value, :value => -1 %>
+    <% if (Votetype.where( "user_id = ? and entity_id = ? and entitytype_id = ?", current_user.id, @entity.id, et.id ).first.try(:value) == -1) %> 
+      <!--%= vt.submit "Downvote", class: "button tiny secondary" %-->
+      <%= vt.submit "", class: "downvoteon" %>
+    <% else %>
+      <%= vt.submit "", class: "downvote" %>
+    <% end %>
+    
+ <% end %>
+
+</div>
+</br>
+</br></br>
+<strong size="20"> Properties </strong>
+</br>
+</br>
 <ul class="no-bullet remove-padding">
-  <% @entity.valid_propertytypes.each do |pt| %>
+  <% et.valid_propertytypes.each do |pt| %>
+
     <li>
       <div class="two-column">
         <strong> <%= pt.name %>: </strong>
@@ -80,26 +249,53 @@
           <h4> Poll </h4>
           <% if @entity.has_property_values?(pt.id) %>
             <ul class="no-bullet remove-padding">
-              <%= form_for(@vote) do |f| %>      
-                <% @entity.get_property_values(pt.id).each do |property| %>
+            
+              <%= form_for(@vote) do |f| %>  
+               <% properties_values = @entity.get_property_values(pt.id)  %> 
+               <% if properties_values.length > 0 %>
+               <% first_property =  properties_values.first %> 
+
+                <% properties_values.each do |property| %>
+                
                   <li>
-                    <%= f.radio_button :property_id, property.id %>
+
+                    <%= f.radio_button :property_id, property.id ,{ :checked => first_property.id == property.id }  %>
+                    
                     <%= property.value %>
-                    (<%= property.votes.count + property.certainty %>)
+
+                    (<%= property.total_votes_certainty + property.certainty %>)
                     <% if property.user_has_voted_on_it?( current_user.id ) %>
                       <%= image_tag "vote.png" %>
                     <% end %>
                   </li>
                 <% end %>
+                <div class="row collapse">
+                  <div class="small-3 columns">
+                  <%= f.label :certainty, class: "left" %>
+                  </div>
+                  <div class="small-9 columns">
+                    <span>
+                      None
+                      <%= f.radio_button :certainty, 1 %>
+                      <%= f.radio_button :certainty, 2 %>
+                      <%= f.radio_button :certainty, 3 %>
+                      <%= f.radio_button :certainty, 4 %>
+                      <%= f.radio_button :certainty, 5, { :checked => true } %>
+                      Absolute
+                    </span>
+                  </div>
+                </div>
                 <div>
                   <%= f.submit "Vote or Change Vote", class: "button tiny success" %>
                 </div>
+                <% end %>
               <% end %>
             </ul>
           <% else %>
             <p>No values available. Be the first to add one!</p>
           <% end %>
         </div>
+
         <div class="small-6 columns">
           <h4> New <%= pt.name %> </h4>
           <%= form_for(@property) do |f| %>
@@ -120,7 +316,7 @@
               <%= f.label :value, class: "left inline" %>
               </div>
               <div class="small-9 columns">
-                <% if @entity.entitytype.name == 'Person' && pt.name == 'Name' %>
+                <% if @entity.entitytypes.first.name == 'Person' && pt.name == 'Name' %>
                   <%= f.text_field :value, class: 'person_name_input' %>
                 <% else %>
                   <%= f.text_field :value %>
@@ -156,9 +352,24 @@
   <% end %>
 </ul>
 
+<hr/>
+</br>
+ <% end %>
+
+
+<!--
+<p>
+  <strong>Type:</strong>
+  <%= @entity.entitytypes.map { |et| et.name } .join(", ") %>
+</p>
+
+<!-- Property Values and Forms -->
+
+
+
 <!-- Stories -->
 
-<hr/>
+
 <h4> Stories </h4>
 
 <div>
@@ -190,3 +401,4 @@
     <div class="person_data"><%= p.name %></div>
   <% end %>
 </div>
+

@@ -1,0 +1,33 @@
+<h1>Listing votetypes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Entity</th>
+      <th>User</th>
+      <th>Entitytype</th>
+      <th>Value</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @votetypes.each do |votetype| %>
+      <tr>
+        <td><%= votetype.entity %></td>
+        <td><%= votetype.user %></td>
+        <td><%= votetype.entitytype %></td>
+        <td><%= votetype.value %></td>
+        <td><%= link_to 'Show', votetype %></td>
+        <td><%= link_to 'Edit', edit_votetype_path(votetype) %></td>
+        <td><%= link_to 'Destroy', votetype, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Votetype', new_votetype_path %>

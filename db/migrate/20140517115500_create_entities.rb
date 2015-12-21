@@ -7,7 +7,7 @@ class CreateEntities < ActiveRecord::Migration
       t.integer :y2
       t.references :user, index: true
       t.references :photo, index: true
-      t.references :entitytype, index: true
+      
 
       t.timestamps
     end

@@ -5,6 +5,14 @@ class UsersController < ApplicationController
   # GET /users/1.json
   def show      
 
+    other_photos = Photo.all.where.not(id: @user.photos.map(&:id))
+    
+    @index = params[:index].to_i || 0
+
+    @max_index = other_photos.length % 5 
+
+    @other_photos = other_photos.offset(@index * 5).limit(5)
+
   end
 
   def import

@@ -2,6 +2,7 @@
   User Profile - 
 <% end %>
 
+
 <h2>
   <%= @user.email %>
 </h2>
@@ -27,7 +28,7 @@
 
 <!-- Listing Photos -->
 <hr/>
-<h3>Photos</h3>
+<h3>My Photos</h3>
 <div>
   <% @user.photos.each do |photo| %>
     <div class="two-sides-container">
@@ -55,6 +56,53 @@
     </div>
   <% end %>
 </div>
+
+<!-- Listing Photos -->
+<hr/>
+<h3>All Other Photos</h3>
+<div>
+
+    <% @other_photos.each do |photo| %>
+
+        <div class="two-sides-container">         
+          <div class="two-column">
+            <%= link_to photo do %>
+              <%= image_tag photo.picture.url(:small), class: "align-right" %>
+            <% end %>
+          </div>
+          <div class="two-column">
+            <ul class="vcard align-left maximize-dims">
+              <li>
+                <%= link_to photo.address, photo %>
+              </li>
+              <li>
+                <%= photo.date %>
+              </li>
+              <li>
+                <%= photo.entities.count %> entities
+              </li>
+              <li>
+                <%= photo.photostories.count %> stories
+              </li>
+            </ul>
+          </div>
+        </div>
+
+    <% end %>
+
+    <% if @index > 0 %>
+      <div class="button tiny succesful">
+        <%= link_to( "Previous", user_path(current_user, :index => (@index - 1)) ) %>  
+      </div>
+    <%end%>
+
+    <div class="button tiny succesful">
+      <% if @index < @max_index %>
+        <%= link_to( "Next", user_path(current_user, :index => (@index + 1)) ) %>  
+      <%end%>
+    </div>
+</div>
+
 
 <!-- Family Tree -->
 <hr/>

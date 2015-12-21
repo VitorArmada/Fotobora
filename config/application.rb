@@ -20,11 +20,10 @@ module Fotobora
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    config.middleware.use PDFKit::Middleware#, :print_media_type => true#, :wkhtmltopdf => '/home/sergio/.rvm/gems/wkhtmltox/bin/wkhtmltopdf'
+    config.middleware.use PDFKit::Middleware#, :print_media_type => true, :wkhtmltopdf => '/home/vitor/.rvm/gems/ruby-2.1.5/bin/wkhtmltopdf'
     # sudo apt-get install wkhtmltopdf
     #config.action_controller.asset_host = "http://localhost:8080"
     config.encoding = "utf-8"
-
 
     #Paperclip.options[:command_path] = 'C:/PROGRA~1/IMAGEM~1.7-Q'
   end

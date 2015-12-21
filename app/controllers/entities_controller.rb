@@ -14,8 +14,28 @@ class EntitiesController < ApplicationController
     @people = @entity.photo.user.people 
     @propertytypes = Propertytype.all
     @vote = Vote.new
+    @votetype = Votetype.new
     @property = Property.new
-  end
+
+    
+    @entitytypes = @entity.entitytypes 
+    entitytype_sql = "(" + @entitytypes.map{|et| "'" + et.id.to_s + "'" }.join(',')+ ")" 
+    vote_sums = ActiveRecord::Base.connection.execute("SELECT entitytype_id, entity_id, sum(value) as totalvotes 
+      FROM votetypes 
+      WHERE entity_id = #{@entity.id}
+      AND entitytype_id IN #{entitytype_sql}
+      GROUP BY entitytype_id, entity_id 
+      ORDER BY totalvotes") 
+
+    vote_sums_h = {}  
+
+    vote_sums.each do |vs| 
+    vote_sums_h[vs['entitytype_id']] = vs['totalvotes'] 
+    end 
+
+    @entitytypes = @entitytypes.to_a.sort_by!{|et| -(vote_sums_h[et.id] || 0) } 
+
+ end
 
   # GET /entities/new
   def new
@@ -30,6 +50,12 @@ class EntitiesController < ApplicationController
   # POST /entities
   # POST /entities.json
   def create
+    entity_params['properties_attributes'].each do |k,v|
+      if v['value'] == ''
+        entity_params['properties_attributes'].delete(k)
+      end
+    end
+
     @entity = @photo.entities.create(entity_params)
     @entity.user_id = current_user.id
 
@@ -69,10 +95,40 @@ class EntitiesController < ApplicationController
     end
   end
 
-  private
-    def set_photo
-      @photo = Photo.find(params[:photo_id])
+
+  def add_entity_type
+
+    entity_params['properties_attributes'].each do |k,v|
+      if v['value'] == ''
+        entity_params['properties_attributes'].delete(k)
+      end
     end
+
+    @entity = Entity.find(entity_params[:current_id])
+    selected_entitytype = Entitytype.find(entity_params[:entitytype_ids].first)
+    @entity.entitytypes << selected_entitytype
+
+    entity_params['properties_attributes'].each do |k,v|
+     @entity.properties.create(v)
+   end
+
+   respond_to do |format|
+    if @entity.save
+      format.html { redirect_to @entity, notice: 'Entity was successfully attributed a new type.' }
+      format.json { render action: 'show', status: :created, location: @entity }
+    else
+      format.html { render action: 'show' }
+      format.json { render json: @entity.errors, status: :unprocessable_entity }
+    end
+  end
+
+end
+
+
+private
+def set_photo
+  @photo = Photo.find(params[:photo_id])
+end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_entity
@@ -92,5 +148,5 @@ class EntitiesController < ApplicationController
         #     :propertytype_id
         #   ]
         # )
-    end
+end
 end

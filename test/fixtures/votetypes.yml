@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  entity_id: 
+  user_id: 
+  entitytype_id: 
+  value: 1
+
+two:
+  entity_id: 
+  user_id: 
+  entitytype_id: 
+  value: 1

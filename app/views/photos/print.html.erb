@@ -56,7 +56,7 @@
     <% @photo.entities.each do |e| %>
     <tr>
       <td><%= e.id %></td>
-      <td><%= e.entitytype.name %></td>
+      <td><%= e.entitytypes.name %></td>
       <td><%= e.summary_label %></td>
       <td><%= e.user.email %></td>
       <td><%= e.pretty_date %></td>
@@ -114,7 +114,7 @@
       <strong> on </strong><%= e.pretty_date %>
     </p>
     
-    <p><strong>Type: </strong><%= e.entitytype.name %></p>
+    <p><strong>Type: </strong><%= e.entitytypes.name %></p>
 
     <h4>Properties:</h4>
 

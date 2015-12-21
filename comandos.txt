@@ -1,0 +1,43 @@
+comandos devise
+
+rails generate scaffold photo address:string date:datetime user:references 
+
+rails generate scaffold photostory title:string text:text date:datetime photo:references user:references
+
+rails generate scaffold photostorycomment text:text date:datetime photostory:references user:references
+
+rails generate model entitytype name:string propertytype:references
+
+rails generate model propertytype name:string entitytype:references
+
+rails generate scaffold entity x1:integer x2:integer y1:integer y2:integer user:references photo:references entitytype:references
+
+rails generate scaffold entitystory title:string text:text date:datetime entity:references user:references
+
+rails generate scaffold entitystorycomment text:text date:datetime entitystory:references user:references
+
+rails generate scaffold property value:string certainty:integer entity:references propertytype:references
+
+rails generate scaffold vote property:references user:references
+
+rails generate paperclip photo picture
+
+rails generate paperclip user picture
+
+sudo apt-get install wkhtmltopdf
+
+sudo apt-get install libxslt-dev libxml2-dev
+
+rails generate model person name:string father:references mother:references user:references
+
+rails generate paperclip user gentree
+
+
+
+rails generate scaffold votetype entity:references user:references entitytype:references value:integer
+
+
+
+rake db:drop; rake db:migrate; rake db:seed
+
+unicorn_rails -c config/unicorn.conf -p 3000

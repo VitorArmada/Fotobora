@@ -119,11 +119,11 @@
       <%= f.hidden_field :y1, :class => "coord_y1" %>
       <%= f.hidden_field :y2, :class => "coord_y2" %>
 
-      <%= f.hidden_field :entitytype_id, :value => et.id %>
+      <%= f.hidden_field :entitytype_ids, :multiple => true, :value => et.id %>
 
       <!-- Nested atributes for the initial property values: -->
 
-      <% et.propertytypes.each do |pt| %>
+      <% et.valid_propertytypes.each do |pt| %>
         <%= f.fields_for :properties, @entity.properties.build do |g| %>
           <div class="row">
             <div class="small-2 columns">

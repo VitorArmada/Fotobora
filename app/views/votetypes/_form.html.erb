@@ -1,0 +1,33 @@
+<%= form_for(@votetype) do |f| %>
+  <% if @votetype.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@votetype.errors.count, "error") %> prohibited this votetype from being saved:</h2>
+
+      <ul>
+      <% @votetype.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :entity %><br>
+    <%= f.text_field :entity %>
+  </div>
+  <div class="field">
+    <%= f.label :user %><br>
+    <%= f.text_field :user %>
+  </div>
+  <div class="field">
+    <%= f.label :entitytype %><br>
+    <%= f.text_field :entitytype %>
+  </div>
+  <div class="field">
+    <%= f.label :value %><br>
+    <%= f.number_field :value %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

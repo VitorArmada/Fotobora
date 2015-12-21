@@ -1,0 +1,2 @@
+module VotetypesHelper
+end

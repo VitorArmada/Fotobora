@@ -82,3 +82,70 @@
 #error_explanation * {
 	color: #EEEEEE;
 }
+
+
+.upvote {
+  display: inline-block;
+  overflow: hidden;
+  width: 40px;
+  height: 25px;
+  cursor: pointer;
+  background: url('http://i.stack.imgur.com/iqN2k.png');
+  background-position: 0 -25px;
+  float:left;
+  border:none;
+  position:relative;
+  margin-top: -50px;
+  margin-left: 170px;
+} 
+
+
+.upvoteon {
+  display: inline-block;
+  overflow: hidden;
+  width: 40px;
+  height: 25px;
+  cursor: pointer;
+  background: url('http://i.stack.imgur.com/iqN2k.png');
+  background-position: 0 2px;
+  float:left;
+  border:none;
+  position:relative;
+  margin-top: -50px;
+  margin-left: 170px;
+}
+
+
+.downvote {
+  display: inline-block;
+  overflow: hidden;
+  width: 40px;
+  height: 25px;
+  cursor: pointer;
+  background: url('http://i.stack.imgur.com/iqN2k.png');
+  background-position: 0 -25px;
+  transform: rotate(180deg);
+  float:left;
+  border:none;
+  position: relative;
+  margin-top: -23px;
+  margin-left: 170px;
+} 
+
+.downvoteon {
+  display: inline-block;
+  overflow: hidden;
+  width: 40px;
+  height: 25px;
+  cursor: pointer;
+  background: url('http://i.stack.imgur.com/iqN2k.png');
+  background-position: 0 2px;
+  transform: rotate(180deg);
+  float:left;
+  border:none;
+  position: relative;
+  margin-top: -23px;
+  margin-left: 170px;
+} 
+
+

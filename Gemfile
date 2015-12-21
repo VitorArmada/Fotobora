@@ -4,6 +4,8 @@ gem 'ruby-graphviz'
 
 gem 'nokogiri'
 
+gem 'rack', '1.5.5'
+
 gem 'pdfkit'
 
 #gem 'unicorn' # To fix pdfkit issues
@@ -43,6 +45,10 @@ group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
 end
+
+gem 'byebug'
+
+gem 'wkhtmltopdf-binary'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

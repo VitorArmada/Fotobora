@@ -1,5 +1,9 @@
 Fotobora::Application.routes.draw do
 
+  resources :votetypes
+
+  resources :requests
+
   root 'users#show'
 
   get 'search', to: 'search#index', as: :search
@@ -27,6 +31,12 @@ Fotobora::Application.routes.draw do
       get 'print'
       get 'import'
       post 'import_post'
+    end
+  end
+
+   resources :entities do
+    member do
+      patch 'add_entity_type'
     end
   end
 
