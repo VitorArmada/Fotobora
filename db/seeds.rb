@@ -6,34 +6,34 @@
 #   cities = City.create([{ name: 'Chicago' } { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-u = User.create(:email => 'vitor@fotobora.com', :password => 'asd', :password_confirmation => 'asd')
-u.save!(:validate => false)
+#u = User.create(:email => 'vitor@fotobora.com', :password => 'asd', :password_confirmation => 'asd')
+#u.save!(:validate => false)
 
-u2 = User.create(:email => 'sergio@fotobora.com', :password => 'asd', :password_confirmation => 'asd')
-u2.save!(:validate => false)
+#u2 = User.create(:email => 'sergio@fotobora.com', :password => 'asd', :password_confirmation => 'asd')
+#u2.save!(:validate => false)
 
-p = Photo.create( { id: 1, address: 'One Street', date: Date.new(2014,2,1), user: u } )
-p.picture = File.open('1.jpg')
-p.save!
+#p = Photo.create( { id: 1, address: 'One Street', date: Date.new(2014,2,1), user: u } )
+#p.picture = File.open('1.jpg')
+#p.save!
 
-p = Photo.create( { id: 2, address: 'Two Street', date: Date.new(2015,2,1), user: u2 } )
-p.picture = File.open('2.jpg')
-p.save!
+#p = Photo.create( { id: 2, address: 'Two Street', date: Date.new(2015,2,1), user: u2 } )
+#p.picture = File.open('2.jpg')
+#p.save!
 
-p = Photo.create( { id: 3, address: 'Two Street', date: Date.new(2015,3,1), user: u2 } )
-p.picture = File.open('3.jpg')
-p.save!
+#p = Photo.create( { id: 3, address: 'Two Street', date: Date.new(2015,3,1), user: u2 } )
+#p.picture = File.open('3.jpg')
+#p.save!
 
-p = Photo.create( { id: 4, address: 'Two Street', date: Date.new(2015,3,1), user: u2 } )
-p.picture = File.open('4.jpg')
-p.save!
+#p = Photo.create( { id: 4, address: 'Two Street', date: Date.new(2015,3,1), user: u2 } )
+#p.picture = File.open('4.jpg')
+#p.save!
 
-p = Photo.create( { id: 5, address: 'Two Street', date: Date.new(2015,3,1), user: u2 } )
-p.picture = File.open('5.jpg')
-p.save!
+#p = Photo.create( { id: 5, address: 'Two Street', date: Date.new(2015,3,1), user: u2 } )
+#p.picture = File.open('5.jpg')
+#p.save!
 
 
-Photostory.create( { photo_id: 1, id: 1, title: 'Piquenique na Avó Joana', user: u, text: 'Lembro-me desta tarde como se fosse ontem. Fizemos um piquenique para a quinta da avó, e depois fomos fazer uma caminhada. Perto do fim, chegamos à beira do tractor velho e dos cavalos, e decidimos tirar uma foto.' } )
+#Photostory.create( { photo_id: 1, id: 1, title: 'Piquenique na Avó Joana', user: u, text: 'Lembro-me desta tarde como se fosse ontem. Fizemos um piquenique para a quinta da avó, e depois fomos fazer uma caminhada. Perto do fim, chegamos à beira do tractor velho e dos cavalos, e decidimos tirar uma foto.' } )
 
 #Requests.create( { photo_id: 1, id: 1, title: 'Identificacao de Pessoas', user: u, text: 'Alguem me consegue identificar estas pessoas?' })
 
@@ -77,32 +77,32 @@ Propertytype.create( { entitytype_id: 10, id: 17, name: 'Owner' } )
 Propertytype.create( { entitytype_id: 10, id: 18, name: 'Name' } )
 
 
-Entity.create( { photo_id: 1,
-				 id: 1,
-				 x1: 300, x2: 375, y1: 115, y2: 240,
-				 user: u,
-				 entitytype_ids: [1,2,3]
-			   } )
-Entity.create( { photo_id: 1,
-				 id: 2,
-				 x1: 400, x2: 460, y1: 230, y2: 360,
-				 user: u,
-				 entitytype_ids: [1]
-			   } )
-Entity.create( { photo_id: 1,
-				 id: 3,
-				 x1: 440, x2: 630, y1: 350, y2: 475,
-				 user: u,
-				 entitytype_ids: [4]
-			   } )
+#Entity.create( { photo_id: 1,
+#				 id: 1,
+#				 x1: 300, x2: 375, y1: 115, y2: 240,
+#				 user: u,
+#				 entitytype_ids: [1,2,3]
+#			   } )
+#Entity.create( { photo_id: 1,
+#				 id: 2,
+#				 x1: 400, x2: 460, y1: 230, y2: 360,
+#				 user: u,
+#				 entitytype_ids: [1]
+#			   } )
+#Entity.create( { photo_id: 1,
+#				 id: 3,
+#				 x1: 440, x2: 630, y1: 350, y2: 475,
+#				 user: u,
+#				 entitytype_ids: [4]
+#			   } )
 
-Property.create( { entity_id: 1, propertytype_id: 1,
-					id: 1, value: 'Joana Silva', certainty: 5  } )
-Property.create( { entity_id: 2, propertytype_id: 1,
-					id: 2, value: 'Ricardo Silva', certainty: 4  } )
-Property.create( { entity_id: 3, propertytype_id: 9,
-					id: 3, value: 'Bobi', certainty: 4  } )
-Property.create( { entity_id: 3, propertytype_id: 9,
-					id: 4, value: 'Tareco', certainty: 1  } )
-Property.create( { entity_id: 3, propertytype_id: 10,
-					id: 5, value: 'Ricardo Silva', certainty: 5  } )
+#Property.create( { entity_id: 1, propertytype_id: 1,
+#					id: 1, value: 'Joana Silva', certainty: 5  } )
+#Property.create( { entity_id: 2, propertytype_id: 1,
+#					id: 2, value: 'Ricardo Silva', certainty: 4  } )
+#Property.create( { entity_id: 3, propertytype_id: 9,
+#					id: 3, value: 'Bobi', certainty: 4  } )
+#Property.create( { entity_id: 3, propertytype_id: 9,
+#					id: 4, value: 'Tareco', certainty: 1  } )
+#Property.create( { entity_id: 3, propertytype_id: 10,
+#					id: 5, value: 'Ricardo Silva', certainty: 5  } )

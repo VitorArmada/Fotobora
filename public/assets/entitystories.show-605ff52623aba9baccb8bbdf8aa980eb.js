@@ -1,0 +1,1 @@
+$(document).ready(function(){$("#picture").mapster({isSelectable:!1,stroke:!0,strokeWidth:1,strokeColor:"ffffff",strokeOpacity:.3,fillOpacity:0}),$("area").mapster("set",!0),$(".toggle").click(function(){$(".panel").slideUp(),$(this).next(".panel").slideDown()})});

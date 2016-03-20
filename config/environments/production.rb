@@ -27,7 +27,9 @@ Fotobora::Application.configure do
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = false
+  config.assets.compile = true
+
+  config.assets.precompile = ['*.js','*.css','*.css.erb']
 
   # Generate digests for assets URLs.
   config.assets.digest = true
@@ -77,4 +79,9 @@ Fotobora::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+
+  Paperclip.options[:command_path] = "/usr/bin/convert"
+  Encoding.default_external = Encoding::UTF_8
+  Encoding.default_internal = Encoding::UTF_8
+
 end

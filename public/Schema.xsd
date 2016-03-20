@@ -36,10 +36,10 @@
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="tipoEnt">
-        <xs:restriction base="xs:string"><xs:enumeration value="Person"/><xs:enumeration value="Vehicle"/><xs:enumeration value="Place"/><xs:enumeration value="Pet"/><xs:enumeration value="Object"/><xs:enumeration value="Monument"/></xs:restriction>
+        <xs:restriction base="xs:string"><xs:enumeration value="Person"/><xs:enumeration value="Vehicle"/><xs:enumeration value="Place"/><xs:enumeration value="Pet"/><xs:enumeration value="Object"/><xs:enumeration value="Monument"/><xs:enumeration value="Animal"/><xs:enumeration value="Wild Animal"/><xs:enumeration value="Domestic Animal"/></xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="tipoProp">
-        <xs:restriction base="xs:string"><xs:enumeration value="Name"/><xs:enumeration value="Brand"/><xs:enumeration value="Model"/><xs:enumeration value="License Plate"/><xs:enumeration value="Owner"/><xs:enumeration value="Name"/><xs:enumeration value="Address"/><xs:enumeration value="Owner"/><xs:enumeration value="Name"/><xs:enumeration value="Owner"/><xs:enumeration value="Description"/><xs:enumeration value="Name"/><xs:enumeration value="Inauguration Date"/></xs:restriction>
+        <xs:restriction base="xs:string"><xs:enumeration value="Name"/><xs:enumeration value="Brand"/><xs:enumeration value="Model"/><xs:enumeration value="License Plate"/><xs:enumeration value="Owner"/><xs:enumeration value="Name"/><xs:enumeration value="Address"/><xs:enumeration value="Owner"/><xs:enumeration value="Name"/><xs:enumeration value="Owner"/><xs:enumeration value="Description"/><xs:enumeration value="Name"/><xs:enumeration value="Inauguration Date"/><xs:enumeration value="Species"/><xs:enumeration value="Habitat"/><xs:enumeration value="Owner"/><xs:enumeration value="Name"/></xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="certeza">
         <xs:restriction base="xs:integer">

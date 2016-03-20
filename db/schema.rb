@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20151127164650) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "entities", force: true do |t|
     t.integer  "x1"
     t.integer  "x2"
@@ -24,16 +27,16 @@ ActiveRecord::Schema.define(version: 20151127164650) do
     t.datetime "updated_at"
   end
 
-  add_index "entities", ["photo_id"], name: "index_entities_on_photo_id"
-  add_index "entities", ["user_id"], name: "index_entities_on_user_id"
+  add_index "entities", ["photo_id"], name: "index_entities_on_photo_id", using: :btree
+  add_index "entities", ["user_id"], name: "index_entities_on_user_id", using: :btree
 
   create_table "entities_entitytypes", id: false, force: true do |t|
     t.integer "entity_id"
     t.integer "entitytype_id"
   end
 
-  add_index "entities_entitytypes", ["entity_id"], name: "index_entities_entitytypes_on_entity_id"
-  add_index "entities_entitytypes", ["entitytype_id"], name: "index_entities_entitytypes_on_entitytype_id"
+  add_index "entities_entitytypes", ["entity_id"], name: "index_entities_entitytypes_on_entity_id", using: :btree
+  add_index "entities_entitytypes", ["entitytype_id"], name: "index_entities_entitytypes_on_entitytype_id", using: :btree
 
   create_table "entitystories", force: true do |t|
     t.string   "title"
@@ -44,8 +47,8 @@ ActiveRecord::Schema.define(version: 20151127164650) do
     t.datetime "updated_at"
   end
 
-  add_index "entitystories", ["entity_id"], name: "index_entitystories_on_entity_id"
-  add_index "entitystories", ["user_id"], name: "index_entitystories_on_user_id"
+  add_index "entitystories", ["entity_id"], name: "index_entitystories_on_entity_id", using: :btree
+  add_index "entitystories", ["user_id"], name: "index_entitystories_on_user_id", using: :btree
 
   create_table "entitystorycomments", force: true do |t|
     t.text     "text"
@@ -55,8 +58,8 @@ ActiveRecord::Schema.define(version: 20151127164650) do
     t.datetime "updated_at"
   end
 
-  add_index "entitystorycomments", ["entitystory_id"], name: "index_entitystorycomments_on_entitystory_id"
-  add_index "entitystorycomments", ["user_id"], name: "index_entitystorycomments_on_user_id"
+  add_index "entitystorycomments", ["entitystory_id"], name: "index_entitystorycomments_on_entitystory_id", using: :btree
+  add_index "entitystorycomments", ["user_id"], name: "index_entitystorycomments_on_user_id", using: :btree
 
   create_table "entitytypes", force: true do |t|
     t.string   "name"
@@ -66,8 +69,8 @@ ActiveRecord::Schema.define(version: 20151127164650) do
     t.datetime "updated_at"
   end
 
-  add_index "entitytypes", ["entitytype_id"], name: "index_entitytypes_on_entitytype_id"
-  add_index "entitytypes", ["propertytype_id"], name: "index_entitytypes_on_propertytype_id"
+  add_index "entitytypes", ["entitytype_id"], name: "index_entitytypes_on_entitytype_id", using: :btree
+  add_index "entitytypes", ["propertytype_id"], name: "index_entitytypes_on_propertytype_id", using: :btree
 
   create_table "people", force: true do |t|
     t.string   "name"
@@ -78,9 +81,9 @@ ActiveRecord::Schema.define(version: 20151127164650) do
     t.datetime "updated_at"
   end
 
-  add_index "people", ["father_id"], name: "index_people_on_father_id"
-  add_index "people", ["mother_id"], name: "index_people_on_mother_id"
-  add_index "people", ["user_id"], name: "index_people_on_user_id"
+  add_index "people", ["father_id"], name: "index_people_on_father_id", using: :btree
+  add_index "people", ["mother_id"], name: "index_people_on_mother_id", using: :btree
+  add_index "people", ["user_id"], name: "index_people_on_user_id", using: :btree
 
   create_table "photos", force: true do |t|
     t.string   "address"
@@ -94,7 +97,7 @@ ActiveRecord::Schema.define(version: 20151127164650) do
     t.datetime "picture_updated_at"
   end
 
-  add_index "photos", ["user_id"], name: "index_photos_on_user_id"
+  add_index "photos", ["user_id"], name: "index_photos_on_user_id", using: :btree
 
   create_table "photostories", force: true do |t|
     t.string   "title"
@@ -105,8 +108,8 @@ ActiveRecord::Schema.define(version: 20151127164650) do
     t.datetime "updated_at"
   end
 
-  add_index "photostories", ["photo_id"], name: "index_photostories_on_photo_id"
-  add_index "photostories", ["user_id"], name: "index_photostories_on_user_id"
+  add_index "photostories", ["photo_id"], name: "index_photostories_on_photo_id", using: :btree
+  add_index "photostories", ["user_id"], name: "index_photostories_on_user_id", using: :btree
 
   create_table "photostorycomments", force: true do |t|
     t.text     "text"
@@ -116,8 +119,8 @@ ActiveRecord::Schema.define(version: 20151127164650) do
     t.datetime "updated_at"
   end
 
-  add_index "photostorycomments", ["photostory_id"], name: "index_photostorycomments_on_photostory_id"
-  add_index "photostorycomments", ["user_id"], name: "index_photostorycomments_on_user_id"
+  add_index "photostorycomments", ["photostory_id"], name: "index_photostorycomments_on_photostory_id", using: :btree
+  add_index "photostorycomments", ["user_id"], name: "index_photostorycomments_on_user_id", using: :btree
 
   create_table "properties", force: true do |t|
     t.string   "value"
@@ -128,8 +131,8 @@ ActiveRecord::Schema.define(version: 20151127164650) do
     t.datetime "updated_at"
   end
 
-  add_index "properties", ["entity_id"], name: "index_properties_on_entity_id"
-  add_index "properties", ["propertytype_id"], name: "index_properties_on_propertytype_id"
+  add_index "properties", ["entity_id"], name: "index_properties_on_entity_id", using: :btree
+  add_index "properties", ["propertytype_id"], name: "index_properties_on_propertytype_id", using: :btree
 
   create_table "propertytypes", force: true do |t|
     t.string   "name"
@@ -138,7 +141,7 @@ ActiveRecord::Schema.define(version: 20151127164650) do
     t.datetime "updated_at"
   end
 
-  add_index "propertytypes", ["entitytype_id"], name: "index_propertytypes_on_entitytype_id"
+  add_index "propertytypes", ["entitytype_id"], name: "index_propertytypes_on_entitytype_id", using: :btree
 
   create_table "requests", force: true do |t|
     t.string   "title"
@@ -150,8 +153,8 @@ ActiveRecord::Schema.define(version: 20151127164650) do
     t.datetime "updated_at"
   end
 
-  add_index "requests", ["photo_id"], name: "index_requests_on_photo_id"
-  add_index "requests", ["user_id"], name: "index_requests_on_user_id"
+  add_index "requests", ["photo_id"], name: "index_requests_on_photo_id", using: :btree
+  add_index "requests", ["user_id"], name: "index_requests_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
@@ -176,8 +179,8 @@ ActiveRecord::Schema.define(version: 20151127164650) do
     t.datetime "gentree_updated_at"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "votes", force: true do |t|
     t.integer  "property_id"
@@ -187,8 +190,8 @@ ActiveRecord::Schema.define(version: 20151127164650) do
     t.datetime "updated_at"
   end
 
-  add_index "votes", ["property_id"], name: "index_votes_on_property_id"
-  add_index "votes", ["user_id"], name: "index_votes_on_user_id"
+  add_index "votes", ["property_id"], name: "index_votes_on_property_id", using: :btree
+  add_index "votes", ["user_id"], name: "index_votes_on_user_id", using: :btree
 
   create_table "votetypes", force: true do |t|
     t.integer  "entity_id"
@@ -199,8 +202,8 @@ ActiveRecord::Schema.define(version: 20151127164650) do
     t.datetime "updated_at"
   end
 
-  add_index "votetypes", ["entity_id"], name: "index_votetypes_on_entity_id"
-  add_index "votetypes", ["entitytype_id"], name: "index_votetypes_on_entitytype_id"
-  add_index "votetypes", ["user_id"], name: "index_votetypes_on_user_id"
+  add_index "votetypes", ["entity_id"], name: "index_votetypes_on_entity_id", using: :btree
+  add_index "votetypes", ["entitytype_id"], name: "index_votetypes_on_entitytype_id", using: :btree
+  add_index "votetypes", ["user_id"], name: "index_votetypes_on_user_id", using: :btree
 
 end
